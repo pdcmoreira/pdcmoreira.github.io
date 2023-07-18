@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useKeyDetection } from './keyDetection'
+import { useActiveKeyActions } from './activeKeyActions'
 
 const { pressedKeys } = useKeyDetection()
+
+const { movementX, movementY } = useActiveKeyActions(pressedKeys.value)
 </script>
 
 <template>
@@ -11,6 +14,8 @@ const { pressedKeys } = useKeyDetection()
     <div class="player"></div>
 
     <div class="hud">
+      <pre>{{ movementX }} | {{ movementY }}</pre>
+
       <pre>{{ pressedKeys }}</pre>
     </div>
   </div>
