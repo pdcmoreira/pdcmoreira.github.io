@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useKeyDetection } from './keyDetection'
 import { useActiveKeyActions } from './activeKeyActions'
+
+// TODO: load dynamically
 import world from './assets/world.json'
 import exteriors from './assets/exteriors.json'
 
@@ -29,12 +31,13 @@ const getImageBackgroundPosition = (index: number) => {
 }
 
 // World
+
+// TODO: update on resize
+const windowHeight = window.innerHeight
+const windowWidth = window.innerWidth
+
 const worldWidthPx = world.width * world.tilewidth
 const worldHeightPx = world.height * world.tileheight
-
-const layersContainerStyle = {
-  left: `calc(50% - (${worldWidthPx}px / 2))`
-}
 
 const { pressedKeys } = useKeyDetection()
 
@@ -42,8 +45,14 @@ const { movementX, movementY } = useActiveKeyActions(pressedKeys.value)
 
 const movementSpeed = 4
 
-let playerTop = ref(0)
-let playerLeft = ref(0)
+// Player position relative to the world
+let playerTop = ref(1096)
+let playerLeft = ref(516)
+
+const mapStyle = computed(() => ({
+  top: windowHeight / 2 - worldHeightPx / 2 - (playerTop.value - worldHeightPx / 2) + 'px',
+  left: windowWidth / 2 - worldWidthPx / 2 - (playerLeft.value - worldWidthPx / 2) + 'px'
+}))
 
 onMounted(() => {
   function gameLoop() {
@@ -74,8 +83,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="journey-game">
-    <div class="map">
-      <div class="layers-container" :style="layersContainerStyle">
+    <div class="map" :style="mapStyle">
+      <div class="layers-container">
         <div
           v-for="(layer, index) in world.layers"
           :key="layer.id"
@@ -90,15 +99,15 @@ onBeforeUnmount(() => {
           />
         </div>
       </div>
-    </div>
 
-    <div
-      class="player"
-      :style="{
-        top: playerTop + 'px',
-        left: playerLeft + 'px'
-      }"
-    ></div>
+      <div
+        class="player"
+        :style="{
+          top: playerTop + 'px',
+          left: playerLeft + 'px'
+        }"
+      />
+    </div>
 
     <div class="hud">
       <pre>Player movement: {{ movementX }} | {{ movementY }}</pre>
@@ -120,9 +129,9 @@ onBeforeUnmount(() => {
   .map {
     position: absolute;
     top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
 
     .layers-container {
       position: relative;
