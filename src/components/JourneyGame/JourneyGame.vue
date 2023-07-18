@@ -101,11 +101,11 @@ onBeforeUnmount(() => {
     ></div>
 
     <div class="hud">
-      <pre>{{ movementX }} | {{ movementY }}</pre>
+      <pre>Player movement: {{ movementX }} | {{ movementY }}</pre>
 
-      <pre>{{ playerTop }} | {{ playerLeft }}</pre>
+      <pre>Player position: {{ playerTop }} | {{ playerLeft }}</pre>
 
-      <pre>{{ pressedKeys }}</pre>
+      <pre>{{ pressedKeys.join(', ') || 'No keys being pressed.' }}</pre>
     </div>
   </div>
 </template>
@@ -160,6 +160,7 @@ onBeforeUnmount(() => {
     position: fixed;
     bottom: 0;
     padding: 10px;
+    color: #fff;
   }
 }
 </style>
