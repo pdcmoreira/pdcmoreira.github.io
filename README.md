@@ -29,3 +29,18 @@ pnpm test:unit
 ```sh
 pnpm lint
 ```
+
+## TODO
+
+### Features
+
+- Game screens (main menu, gameplay, end screen)
+- Gameplay state
+  - Free
+  - Locked (for running dialogue, scripts, etc), which limits user input (ex: "next line of dialogue")
+- Player sprites, animated according to movement
+- Action keys 
+
+## Bugs
+
+- Force releasing active keys when window loses focus
