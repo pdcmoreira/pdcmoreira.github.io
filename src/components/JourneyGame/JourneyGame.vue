@@ -50,8 +50,8 @@ let playerTop = ref(1096)
 let playerLeft = ref(516)
 
 const mapStyle = computed(() => ({
-  top: windowHeight / 2 - worldHeightPx / 2 - (playerTop.value - worldHeightPx / 2) + 'px',
-  left: windowWidth / 2 - worldWidthPx / 2 - (playerLeft.value - worldWidthPx / 2) + 'px'
+  top: windowHeight / 2 - playerTop.value + 'px',
+  left: windowWidth / 2 - playerLeft.value + 'px'
 }))
 
 onMounted(() => {
