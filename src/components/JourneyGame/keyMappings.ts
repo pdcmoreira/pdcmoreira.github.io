@@ -5,7 +5,8 @@ export const keyMappings: KeyMap = {
   moveLeft: ['a', 'A', 'ArrowLeft'],
   moveDown: ['s', 'S', 'ArrowDown'],
   moveRight: ['d', 'D', 'ArrowRight'],
-  moveUp: ['w', 'W', 'ArrowUp']
+  moveUp: ['w', 'W', 'ArrowUp'],
+  main: [' ', 'Enter']
 }
 
 // Process key mappings into a flat map
