@@ -1,43 +1,8 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useKeyDetection } from './keyDetection'
 import { useActiveKeyActions } from './activeKeyActions'
-
-// TODO: load dynamically
-import world from './assets/world.json'
-import exteriors from './assets/exteriors.json'
-
-// Tileset
-const cols = exteriors.imagewidth / exteriors.tilewidth
-const rows = exteriors.imageheight / exteriors.tileheight
-
-const getMatrixCoordinates = (index: number): [number, number] => [
-  Math.floor(index / cols),
-  (index % cols) - 1
-]
-
-const getImagePixelPosition = (row: number, col: number): [number, number] => [
-  col * exteriors.tilewidth,
-  row * exteriors.tileheight
-]
-
-const getImagePixelPositionByIndex = (index: number) =>
-  getImagePixelPosition(...getMatrixCoordinates(index))
-
-const getImageBackgroundPosition = (index: number) => {
-  const [x, y] = getImagePixelPositionByIndex(index)
-
-  return `${-x}px ${-y}px`
-}
-
-// World
-
-// TODO: update on resize
-const windowHeight = window.innerHeight
-const windowWidth = window.innerWidth
-
-const worldWidthPx = world.width * world.tilewidth
-const worldHeightPx = world.height * world.tileheight
+import { useWorldRendering } from './worldRendering'
 
 const { pressedKeys } = useKeyDetection()
 
@@ -46,13 +11,14 @@ const { movementX, movementY } = useActiveKeyActions(pressedKeys.value)
 const movementSpeed = 4
 
 // Player position relative to the world
+// TODO: load initial positions from some map property?
 let playerTop = ref(1096)
 let playerLeft = ref(516)
 
-const mapStyle = computed(() => ({
-  top: windowHeight / 2 - playerTop.value + 'px',
-  left: windowWidth / 2 - playerLeft.value + 'px'
-}))
+const { world, mapStyle, tileBackground, tileBackgroundPositionByIndex } = useWorldRendering(
+  playerTop,
+  playerLeft
+)
 
 onMounted(() => {
   function gameLoop() {
@@ -95,7 +61,7 @@ onBeforeUnmount(() => {
             v-for="(tile, index) in layer.data"
             :key="index"
             class="tile"
-            :style="{ 'background-position': getImageBackgroundPosition(tile) }"
+            :style="{ 'background-position': tileBackgroundPositionByIndex[tile] }"
           />
         </div>
       </div>
@@ -149,8 +115,7 @@ onBeforeUnmount(() => {
         grid-row-gap: 0px;
 
         .tile {
-          color: white;
-          background: url('./assets/exteriors_tileset.png') 0px 0px no-repeat;
+          background: v-bind(tileBackground);
         }
       }
     }
