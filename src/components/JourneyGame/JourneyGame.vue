@@ -15,8 +15,8 @@ const movementSpeed = 4
 let playerTop = ref(1096)
 let playerLeft = ref(516)
 
-let lastMovementX = ref(0)
-let lastMovementY = ref(0)
+let lastMovementX = 0
+let lastMovementY = 0
 
 const { world, mapStyle, tileBackground, tileBackgroundPositionByIndex } = useWorldRendering(
   playerTop,
@@ -27,16 +27,16 @@ onMounted(() => {
   function gameLoop() {
     // Force movement for whole tiles
 
-    lastMovementY.value = movementY.value || lastMovementY.value
+    lastMovementY = movementY.value || lastMovementY
 
-    lastMovementX.value = movementX.value || lastMovementX.value
+    lastMovementX = movementX.value || lastMovementX
 
     if (movementY.value || playerTop.value % world.tileheight) {
-      playerTop.value += lastMovementY.value * movementSpeed
+      playerTop.value += lastMovementY * movementSpeed
     }
 
     if (movementX.value || playerLeft.value % world.tilewidth) {
-      playerLeft.value += lastMovementX.value * movementSpeed
+      playerLeft.value += lastMovementX * movementSpeed
     }
 
     // TODO: limit to walkable tiles instead:
