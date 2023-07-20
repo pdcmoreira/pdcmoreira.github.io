@@ -39,6 +39,7 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
 
   return {
     world,
+    columns,
     mapStyle,
     tileBackground,
     tileBackgroundPositionByIndex

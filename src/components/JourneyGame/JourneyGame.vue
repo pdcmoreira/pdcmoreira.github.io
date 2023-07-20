@@ -3,11 +3,14 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useKeyDetection } from './keyDetection'
 import { useActiveKeyActions } from './activeKeyActions'
 import { useWorldRendering } from './worldRendering'
+import { getCollidingIndex } from './utilities/positionCalculations'
 
 const { pressedKeys } = useKeyDetection()
 
 const { movementX, movementY } = useActiveKeyActions(pressedKeys.value)
 
+const playerMiddleX = 16
+const playerMiddleY = 16
 const movementSpeed = 4
 
 // Player position relative to the world
@@ -18,36 +21,44 @@ let playerLeft = ref(516)
 let lastMovementX = 0
 let lastMovementY = 0
 
-const { world, mapStyle, tileBackground, tileBackgroundPositionByIndex } = useWorldRendering(
-  playerTop,
-  playerLeft
-)
+let currentTile = ref<number | null>(null)
+
+const { world, columns, mapStyle, tileBackground, tileBackgroundPositionByIndex } =
+  useWorldRendering(playerTop, playerLeft)
 
 onMounted(() => {
   function gameLoop() {
     // Force movement for whole tiles
 
-    lastMovementY = movementY.value || lastMovementY
-
     lastMovementX = movementX.value || lastMovementX
 
-    if (movementY.value || playerTop.value % world.tileheight) {
-      playerTop.value += lastMovementY * movementSpeed
-    }
+    lastMovementY = movementY.value || lastMovementY
 
     if (movementX.value || playerLeft.value % world.tilewidth) {
       playerLeft.value += lastMovementX * movementSpeed
     }
 
+    if (movementY.value || playerTop.value % world.tileheight) {
+      playerTop.value += lastMovementY * movementSpeed
+    }
+
     // TODO: limit to walkable tiles instead:
+
+    if (playerLeft.value < 0) {
+      playerLeft.value = 0
+    }
 
     if (playerTop.value < 0) {
       playerTop.value = 0
     }
 
-    if (playerLeft.value < 0) {
-      playerLeft.value = 0
-    }
+    currentTile.value = getCollidingIndex(
+      playerLeft.value + playerMiddleX / 2,
+      playerTop.value + playerMiddleY / 2,
+      world.tilewidth,
+      world.tileheight,
+      columns
+    )
 
     requestAnimationFrame(gameLoop)
   }
@@ -92,6 +103,8 @@ onBeforeUnmount(() => {
       <pre>Player movement: {{ movementX }} | {{ movementY }}</pre>
 
       <pre>Player position: {{ playerTop }} | {{ playerLeft }}</pre>
+
+      <pre>Current tile: {{ currentTile }}</pre>
 
       <pre>{{ pressedKeys.join(', ') || 'No keys being pressed.' }}</pre>
     </div>
