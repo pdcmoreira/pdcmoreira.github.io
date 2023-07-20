@@ -1,12 +1,12 @@
-import { getPixelCoordinatesByIndex } from './coordinates'
+import { getPixelsFromIndex } from './positionCalculations'
 
-export const getPixelBackgroundPositionByIndex = (
+export const getBackgroundPositionFromIndex = (
   index: number,
   columns: number,
   tileWidth: number,
   tileHeight: number
 ) => {
-  const [x, y] = getPixelCoordinatesByIndex(index, columns, tileWidth, tileHeight)
+  const [x, y] = getPixelsFromIndex(index, columns, tileWidth, tileHeight)
 
   return `${-x}px ${-y}px`
 }
@@ -20,7 +20,7 @@ export const getTileBackgroundPositionByIndex = (
   const result: { [key: number]: string } = {}
 
   for (let i = 0; i < tileCount; i++) {
-    result[i] = getPixelBackgroundPositionByIndex(i, columns, tileWidth, tileHeight)
+    result[i] = getBackgroundPositionFromIndex(i, columns, tileWidth, tileHeight)
   }
 
   return result
