@@ -14,7 +14,7 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
 
   // Tileset
 
-  const cols = exteriors.imagewidth / exteriors.tilewidth
+  const columns = exteriors.imagewidth / exteriors.tilewidth
 
   // World
 
@@ -32,7 +32,7 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
 
   const tileBackgroundPositionByIndex = getTileBackgroundPositionByIndex(
     exteriors.tilecount,
-    cols,
+    columns,
     world.tilewidth,
     world.tileheight
   )

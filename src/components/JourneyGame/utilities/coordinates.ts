@@ -1,6 +1,6 @@
-export const getMatrixCoordinates = (index: number, cols: number): [number, number] => [
-  Math.floor(index / cols),
-  (index % cols) - 1
+export const getMatrixCoordinates = (index: number, columns: number): [number, number] => [
+  Math.floor(index / columns),
+  (index % columns) - 1
 ]
 
 export const getPixelCoordinates = (
@@ -12,7 +12,7 @@ export const getPixelCoordinates = (
 
 export const getPixelCoordinatesByIndex = (
   index: number,
-  cols: number,
+  columns: number,
   tileWidth: number,
   tileHeight: number
-) => getPixelCoordinates(...getMatrixCoordinates(index, cols), tileWidth, tileHeight)
+) => getPixelCoordinates(...getMatrixCoordinates(index, columns), tileWidth, tileHeight)
