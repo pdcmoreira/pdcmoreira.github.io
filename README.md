@@ -43,4 +43,4 @@ pnpm lint
 
 ## Bugs
 
-- Force releasing active keys when window loses focus
+- Force releasing active keys when window loses focus (other window clicked or right click during movement)
