@@ -1,5 +1,5 @@
 import { computed, type Ref } from 'vue'
-import { getTileBackgroundPositionByIndex } from './utilities/backgroundPosition'
+import { getTileBackgroundPositionByIndex } from './utilities/tileRendering'
 
 // TODO: load dynamically
 import world from './assets/world.json'
