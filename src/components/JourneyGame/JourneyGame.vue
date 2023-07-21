@@ -9,52 +9,77 @@ const { pressedKeys } = useKeyDetection()
 
 const { movementX, movementY } = useActiveKeyActions(pressedKeys.value)
 
-const playerMiddleX = 16
-const playerMiddleY = 16
+const playerWidth = 32
+const playerHeight = 32
 const movementSpeed = 4
+
+const playerHalfWidth = playerWidth / 2
+const playerHalfHeight = playerHeight / 2
 
 // Player position relative to the world
 // TODO: load initial positions from some map property?
-let playerTop = ref(1096)
-let playerLeft = ref(516)
+let playerTop = ref(1088)
+let playerLeft = ref(512)
 
 let lastMovementX = 0
 let lastMovementY = 0
 
 let currentTile = ref<number | null>(null)
 
-const { world, columns, mapStyle, tileBackground, tileBackgroundPositionByIndex } =
-  useWorldRendering(playerTop, playerLeft)
+// TODO: does this need to be reactive (besides debugging)?
+let targetTile = ref<number | null>(null)
+
+const { world, columns, mapStyle, tileBackground, tileInfoByIndex } = useWorldRendering(
+  playerTop,
+  playerLeft
+)
+
+let completeMoveX = true
+let completeMoveY = true
 
 onMounted(() => {
   function gameLoop() {
+    // TODO:
+    // maybe abstract the gameLoop setup
+    // extract stuff by purpose
+
     // Force movement for whole tiles
 
     lastMovementX = movementX.value || lastMovementX
 
     lastMovementY = movementY.value || lastMovementY
 
-    if (movementX.value || playerLeft.value % world.tilewidth) {
+    completeMoveX = !(playerLeft.value % world.tilewidth)
+
+    completeMoveY = !(playerTop.value % world.tileheight)
+
+    // Moving intent to targetTile
+
+    if ((completeMoveX && movementX.value) || (completeMoveY && movementY.value)) {
+      targetTile.value = getCollidingIndex(
+        playerLeft.value + playerHalfWidth + movementX.value * world.tilewidth,
+        playerTop.value + playerHalfHeight + movementY.value * world.tileheight,
+        world.tilewidth,
+        world.tileheight,
+        columns
+      )
+
+      if (targetTile.value && !tileInfoByIndex[targetTile.value]?.properties?.walkable) {
+        targetTile.value = null
+      }
+    }
+
+    if (!completeMoveX || (movementX.value && targetTile.value)) {
       playerLeft.value += lastMovementX * movementSpeed
     }
 
-    if (movementY.value || playerTop.value % world.tileheight) {
+    if (!completeMoveY || (movementY.value && targetTile.value)) {
       playerTop.value += lastMovementY * movementSpeed
     }
 
-    // TODO: limit to walkable tiles instead:
-
-    if (playerLeft.value < 0) {
-      playerLeft.value = 0
-    }
-
-    if (playerTop.value < 0) {
-      playerTop.value = 0
-    }
-
     currentTile.value = getCollidingIndex(
-      playerLeft.value + playerMiddleX / 2,
-      playerTop.value + playerMiddleY / 2,
+      playerLeft.value + playerHalfWidth,
+      playerTop.value + playerHalfHeight,
       world.tilewidth,
       world.tileheight,
       columns
@@ -85,7 +110,9 @@ onBeforeUnmount(() => {
             v-for="(tile, index) in layer.data"
             :key="index"
             class="tile"
-            :style="{ 'background-position': tileBackgroundPositionByIndex[tile] }"
+            :style="{
+              'background-position': tileInfoByIndex[tile].backgroundPosition
+            }"
           />
         </div>
       </div>
@@ -105,6 +132,8 @@ onBeforeUnmount(() => {
       <pre>Player position: {{ playerTop }} | {{ playerLeft }}</pre>
 
       <pre>Current tile: {{ currentTile }}</pre>
+
+      <pre>Target tile: {{ targetTile }}</pre>
 
       <pre>{{ pressedKeys.join(', ') || 'No keys being pressed.' }}</pre>
     </div>

@@ -1,4 +1,5 @@
 import { getPixelsFromIndex } from './positionCalculations'
+import { exteriors } from './worldLoader'
 
 export const getBackgroundPositionFromIndex = (
   index: number,
@@ -11,16 +12,40 @@ export const getBackgroundPositionFromIndex = (
   return `${-x}px ${-y}px`
 }
 
-export const getTileBackgroundPositionByIndex = (
+export const getPropertiesById = () =>
+  exteriors.tiles.reduce((map, tile) => {
+    map[tile.id] = tile.properties.reduce(
+      (propertiesMap, property: { name: string; value: unknown }) => {
+        propertiesMap[property.name] = property.value
+
+        return propertiesMap
+      },
+      {} as { [key: string]: unknown }
+    )
+
+    return map
+  }, {} as { [key: number]: { [key: string]: unknown } })
+
+export const getTileInfoByIndex = (
   tileCount: number,
   columns: number,
   tileWidth: number,
   tileHeight: number
 ) => {
-  const result: { [key: number]: string } = {}
+  const result: {
+    [key: number]: {
+      backgroundPosition: string
+      properties: { [key: string]: unknown }
+    }
+  } = {}
+
+  const propertiesById = getPropertiesById()
 
   for (let i = 0; i < tileCount; i++) {
-    result[i] = getBackgroundPositionFromIndex(i, columns, tileWidth, tileHeight)
+    result[i] = {
+      backgroundPosition: getBackgroundPositionFromIndex(i, columns, tileWidth, tileHeight),
+      properties: propertiesById[i]
+    }
   }
 
   return result
