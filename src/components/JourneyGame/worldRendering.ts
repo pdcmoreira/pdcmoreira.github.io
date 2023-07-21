@@ -1,10 +1,6 @@
 import { computed, type Ref } from 'vue'
-import { getTileBackgroundPositionByIndex } from './utilities/tileRendering'
-
-// TODO: load dynamically
-import world from './assets/world.json'
-import exteriors from './assets/exteriors.json'
-import tilesetUrl from './assets/exteriors_tileset.png'
+import { getTileInfoByIndex } from './utilities/tileRendering'
+import { world, exteriors, tilesetUrl } from './utilities/worldLoader'
 
 export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number>) {
   // Window
@@ -30,7 +26,7 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
 
   const tileBackground = `url(${tilesetUrl}) 0px 0px no-repeat`
 
-  const tileBackgroundPositionByIndex = getTileBackgroundPositionByIndex(
+  const tileInfoByIndex = getTileInfoByIndex(
     exteriors.tilecount,
     columns,
     world.tilewidth,
@@ -42,6 +38,6 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
     columns,
     mapStyle,
     tileBackground,
-    tileBackgroundPositionByIndex
+    tileInfoByIndex
   }
 }
