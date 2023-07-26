@@ -32,7 +32,8 @@ export const getPixelsFromIndex = (
   columns: number,
   tileWidth: number,
   tileHeight: number
-) => getPixelsFromPosition(...getPositionFromIndex(index, columns), tileWidth, tileHeight)
+): [number, number] =>
+  getPixelsFromPosition(...getPositionFromIndex(index, columns), tileWidth, tileHeight)
 
 export const getCollidingPositionFromPixels = (
   pointX: number,
