@@ -45,19 +45,17 @@ export async function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<
   const worldWidthPx = world.width * world.tilewidth
   const worldHeightPx = world.height * world.tileheight
 
-  const worldGridTemplateColumns = `repeat(${world.width}, ${world.tilewidth}px)`
-  const worldGridTemplateRows = `repeat(${world.height}, ${world.tileheight}px)`
-
   // Pre-render world layers
 
   const tileSet2D = await loadTileSet2D(tilesetUrl)
+
+  const worldBackgroundTileDataUrl = getBackgroundTileDataUrl(tileSet2D, columns)
 
   const mapStyle = computed(() => ({
     top: windowHeight / 2 - playerTop.value + 'px',
     left: windowWidth / 2 - playerLeft.value + 'px',
     width: worldWidthPx + 'px',
-    height: worldHeightPx + 'px',
-    background: `url(${getBackgroundTileDataUrl(tileSet2D, columns)}) 0px 0px repeat`
+    height: worldHeightPx + 'px'
   }))
 
   const processedLayers: {
@@ -113,8 +111,7 @@ export async function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<
   return {
     world,
     columns,
-    worldGridTemplateColumns,
-    worldGridTemplateRows,
+    worldBackgroundTileDataUrl,
     mapStyle,
     processedLayers,
     walkableTiles,
