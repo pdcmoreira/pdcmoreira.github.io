@@ -10,7 +10,7 @@ export const getPositionFromPixels = (
   tileHeight: number
 ): [number, number] => [Math.floor(x / tileWidth), Math.floor(y / tileHeight)]
 
-export const getIndexFromPosition = (x: number, y: number, columns: number) => y * columns + x
+export const getIndexFromPosition = (x: number, y: number, columns: number) => y * columns + x + 1
 
 export const getIndexFromPixels = (
   x: number,
