@@ -1,5 +1,4 @@
 import { computed, type Ref } from 'vue'
-import { getTileInfoByIndex } from './tileRendering'
 import { world, exteriors, tilesetUrl } from './worldLoader'
 import { copyPixels, createImage2D, getTileImageDataFromIndex, loadTileSet2D } from './tileset'
 import { getPixelsFromIndex } from './positionCalculations'
@@ -95,21 +94,12 @@ export async function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<
     })
   })
 
-  // TODO: not needed?
-  const tileInfoByIndex = getTileInfoByIndex(
-    exteriors.tilecount,
-    columns,
-    world.tilewidth,
-    world.tileheight
-  )
-
   return {
     world,
     columns,
     worldBackgroundTileDataUrl,
     mapStyle,
     processedLayers,
-    walkableTiles,
-    tileInfoByIndex
+    walkableTiles
   }
 }
