@@ -2,7 +2,7 @@
 import { onMounted, ref, type ComputedRef, computed } from 'vue'
 import { useKeyDetection } from './lib/keyDetection'
 import { useActiveKeyActions } from './lib/activeKeyActions'
-import { useWorldRendering } from './worldRendering'
+import { useWorldRendering } from './lib/worldRendering'
 import { getIndexFromPixels, getPositionFromPixels } from './lib/positionCalculations'
 
 const { pressedKeys } = useKeyDetection()
