@@ -1,4 +1,4 @@
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { flatKeyMap } from './keyMappings'
 import type { Action } from './types'
 
@@ -16,5 +16,19 @@ export function useActiveKeyActions(activeKeys: string[]) {
     () => getActiveValue('moveUp', -1, 0) + getActiveValue('moveDown', 1, 0)
   )
 
-  return { activeActions, movementX, movementY }
+  const lastActivatedAxis = ref<'x' | 'y' | null>(null)
+
+  watch(movementX, (value) => {
+    if (value) {
+      lastActivatedAxis.value = 'x'
+    }
+  })
+
+  watch(movementY, (value) => {
+    if (value) {
+      lastActivatedAxis.value = 'y'
+    }
+  })
+
+  return { activeActions, movementX, movementY, lastActivatedAxis }
 }
