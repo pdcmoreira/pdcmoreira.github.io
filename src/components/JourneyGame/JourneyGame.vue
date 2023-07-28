@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useKeyDetection } from './lib/keyDetection'
 import { useActiveKeyActions } from './lib/activeKeyActions'
 import { useWorldRendering } from './lib/worldRendering'
 import { usePlayerMovement } from './lib/playerMovement'
 import { useDebug } from './lib/debug'
+import { useGameLoop } from './lib/gameLoop'
 
 const { pressedKeys } = useKeyDetection()
 
@@ -39,19 +40,10 @@ const { updateMovement } = usePlayerMovement(
 
 debugEnabled.value = true
 
-onMounted(async () => {
-  function gameLoop() {
-    // TODO:
-    // maybe abstract the gameLoop setup
+useGameLoop(() => {
+  updateMovement()
 
-    updateMovement()
-
-    updateDebug()
-
-    requestAnimationFrame(gameLoop)
-  }
-
-  requestAnimationFrame(gameLoop)
+  updateDebug()
 })
 </script>
 
