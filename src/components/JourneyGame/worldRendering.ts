@@ -1,13 +1,8 @@
 import { computed, type Ref } from 'vue'
-import { getTileInfoByIndex } from './utilities/tileRendering'
-import { world, exteriors, tilesetUrl } from './utilities/worldLoader'
-import {
-  copyPixels,
-  createImage2D,
-  getTileImageDataFromIndex,
-  loadTileSet2D
-} from './utilities/tileset'
-import { getPixelsFromIndex } from './utilities/positionCalculations'
+import { getTileInfoByIndex } from './lib/tileRendering'
+import { world, exteriors, tilesetUrl } from './lib/worldLoader'
+import { copyPixels, createImage2D, getTileImageDataFromIndex, loadTileSet2D } from './lib/tileset'
+import { getPixelsFromIndex } from './lib/positionCalculations'
 
 const backgroundTileId = 663
 

@@ -3,7 +3,7 @@ import { onMounted, ref, type ComputedRef, computed } from 'vue'
 import { useKeyDetection } from './keyDetection'
 import { useActiveKeyActions } from './activeKeyActions'
 import { useWorldRendering } from './worldRendering'
-import { getIndexFromPixels, getPositionFromPixels } from './utilities/positionCalculations'
+import { getIndexFromPixels, getPositionFromPixels } from './lib/positionCalculations'
 
 const { pressedKeys } = useKeyDetection()
 
