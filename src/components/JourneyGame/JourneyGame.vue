@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, type ComputedRef, computed } from 'vue'
-import { useKeyDetection } from './keyDetection'
-import { useActiveKeyActions } from './activeKeyActions'
+import { useKeyDetection } from './lib/keyDetection'
+import { useActiveKeyActions } from './lib/activeKeyActions'
 import { useWorldRendering } from './worldRendering'
 import { getIndexFromPixels, getPositionFromPixels } from './lib/positionCalculations'
 
