@@ -1,27 +1,28 @@
 <script setup lang="ts">
-import { onMounted, ref, type ComputedRef } from 'vue'
+import { onMounted, ref, type ComputedRef, computed } from 'vue'
 import { useKeyDetection } from './keyDetection'
 import { useActiveKeyActions } from './activeKeyActions'
 import { useWorldRendering } from './worldRendering'
-import { getCollidingIndex } from './utilities/positionCalculations'
+import { getIndexFromPixels, getPositionFromPixels } from './utilities/positionCalculations'
 
 const { pressedKeys } = useKeyDetection()
 
-const { movementX, movementY } = useActiveKeyActions(pressedKeys.value)
+const { movementX, movementY, lastActivatedAxis } = useActiveKeyActions(pressedKeys.value)
+
+let debugEnabled = ref(true)
 
 let loading = ref(true)
 
 const playerWidth = 32
 const playerHeight = 32
-const movementSpeed = 8
-
-const playerHalfWidth = playerWidth / 2
-const playerHalfHeight = playerHeight / 2
+const movementSpeed = 3
 
 // Player position relative to the world
 // TODO: load initial positions from some map property?
 let playerTop = ref(51 * 32)
 let playerLeft = ref(27 * 32)
+
+let worldBackgroundCss: string | null = null
 
 let worldMapStyle:
   | ComputedRef<{
@@ -32,24 +33,35 @@ let worldMapStyle:
 
 let layerImages: string[] = []
 
-let lastMovementX = 0
-let lastMovementY = 0
-
 let currentTile = ref<number | null>(null)
 
-// TODO: does this need to be reactive (besides debugging)?
-let targetTile = ref<number | null>(null)
+let playerX = 0
+let playerY = 0
 
-let completeMoveX = true
-let completeMoveY = true
+// TODO: extract composable with debug stuff
+let debugPlayerX = ref(0)
+let debugPlayerY = ref(0)
+
+const debugPlayerPosition = computed(
+  () => `${debugPlayerX.value}, ${debugPlayerY.value} (${playerLeft.value}px, ${playerTop.value}px)`
+)
+
+const getTargetPixels = (startPixels: number, direction: number, tileSize: number) =>
+  direction
+    ? (direction > 0 ? Math.floor : Math.ceil)((startPixels + tileSize * direction) / tileSize) *
+      tileSize
+    : null
+
+const isMovementComplete = (currentPixels: number, targetPixels: number, direction: number) =>
+  currentPixels === targetPixels ||
+  (direction < 0 && targetPixels > currentPixels) ||
+  (direction > 0 && targetPixels < currentPixels)
 
 onMounted(async () => {
-  const { world, columns, mapStyle, processedLayers, walkableTiles } = await useWorldRendering(
-    playerTop,
-    playerLeft
-  )
+  const { world, worldBackgroundTileDataUrl, mapStyle, processedLayers, walkableTiles } =
+    await useWorldRendering(playerTop, playerLeft)
 
-  console.log(walkableTiles)
+  worldBackgroundCss = `url(${worldBackgroundTileDataUrl}) 0px 0px repeat`
 
   worldMapStyle = mapStyle
 
@@ -57,49 +69,110 @@ onMounted(async () => {
 
   loading.value = false
 
+  const axisMovement = {
+    x: {
+      playerPixels: playerLeft,
+      movement: movementX,
+      lastMovement: 0,
+      movementSize: world.tilewidth
+    },
+
+    y: {
+      playerPixels: playerTop,
+      movement: movementY,
+      lastMovement: 0,
+      movementSize: world.tileheight
+    }
+  }
+
+  const movementTarget: {
+    axis: 'x' | 'y' | null
+    pixels: number | null
+  } = {
+    axis: null,
+    pixels: null
+  }
+
   function gameLoop() {
     // TODO:
     // maybe abstract the gameLoop setup
     // extract stuff by purpose
+    // remove new var declarations here
 
-    // Force movement for whole tiles
+    // TODO: maybe should go with player mid point instead?
+    // getCollidingPositionFromPixels
+    ;[playerX, playerY] = getPositionFromPixels(
+      playerLeft.value,
+      playerTop.value,
+      world.tilewidth,
+      world.tileheight
+    )
 
-    lastMovementX = movementX.value || lastMovementX
+    if (debugEnabled.value) {
+      debugPlayerX.value = playerX
+      debugPlayerY.value = playerY
+    }
 
-    lastMovementY = movementY.value || lastMovementY
+    // Always keep lastMovement up to date
+    ;(['x', 'y'] as ['x', 'y']).forEach((axis) => {
+      axisMovement[axis].lastMovement =
+        axisMovement[axis].movement.value || axisMovement[axis].lastMovement
+    })
 
-    completeMoveX = !(playerLeft.value % world.tilewidth)
+    const resolvePriority = (): ['x', 'y'] | ['y', 'x'] =>
+      lastActivatedAxis.value === 'y' ? ['y', 'x'] : ['x', 'y']
 
-    completeMoveY = !(playerTop.value % world.tileheight)
+    // Process movementTarget
+    resolvePriority().forEach((axis) => {
+      if (movementTarget.axis || !axisMovement[axis].movement.value) {
+        return
+      }
 
-    // Moving intent to targetTile
-
-    if ((completeMoveX && movementX.value) || (completeMoveY && movementY.value)) {
-      targetTile.value = getCollidingIndex(
-        playerLeft.value + playerHalfWidth + movementX.value * world.tilewidth,
-        playerTop.value + playerHalfHeight + movementY.value * world.tileheight,
-        world.tilewidth,
-        world.tileheight,
-        world.width
+      movementTarget.pixels = getTargetPixels(
+        axisMovement[axis].playerPixels.value,
+        axisMovement[axis].lastMovement,
+        axisMovement[axis].movementSize
       )
 
-      // TODO: figure out collision problems
-      if (targetTile.value && !walkableTiles[targetTile.value]) {
-        targetTile.value = null
+      if (
+        movementTarget.pixels !== null &&
+        walkableTiles[
+          getIndexFromPixels(
+            axis === 'x' ? movementTarget.pixels : axisMovement.x.playerPixels.value,
+            axis === 'y' ? movementTarget.pixels : axisMovement.y.playerPixels.value,
+            world.tilewidth,
+            world.tileheight,
+            world.width
+          )
+        ]
+      ) {
+        movementTarget.axis = axis
+      }
+    })
+
+    // Execute movement
+
+    if (movementTarget.axis && movementTarget.pixels !== null) {
+      axisMovement[movementTarget.axis].playerPixels.value +=
+        axisMovement[movementTarget.axis].lastMovement * movementSpeed
+
+      if (
+        isMovementComplete(
+          axisMovement[movementTarget.axis].playerPixels.value,
+          movementTarget.pixels,
+          axisMovement[movementTarget.axis].lastMovement
+        )
+      ) {
+        axisMovement[movementTarget.axis].playerPixels.value = movementTarget.pixels
+
+        movementTarget.axis = null
+        movementTarget.pixels = null
       }
     }
 
-    if (!completeMoveX || (movementX.value && targetTile.value)) {
-      playerLeft.value += lastMovementX * movementSpeed
-    }
-
-    if (!completeMoveY || (movementY.value && targetTile.value)) {
-      playerTop.value += lastMovementY * movementSpeed
-    }
-
-    currentTile.value = getCollidingIndex(
-      playerLeft.value + playerHalfWidth,
-      playerTop.value + playerHalfHeight,
+    currentTile.value = getIndexFromPixels(
+      playerLeft.value,
+      playerTop.value,
       world.tilewidth,
       world.tileheight,
       world.width
@@ -133,14 +206,12 @@ onMounted(async () => {
       />
     </div>
 
-    <div class="hud">
-      <pre>Player movement: {{ movementX }} | {{ movementY }}</pre>
+    <div v-if="debugEnabled" class="debug">
+      <pre>Player movement: {{ movementX }}, {{ movementY }}</pre>
 
-      <pre>Player position: {{ playerTop }} | {{ playerLeft }}</pre>
+      <pre>Player position: {{ debugPlayerPosition }}</pre>
 
       <pre>Current tile: {{ currentTile }}</pre>
-
-      <pre>Target tile: {{ targetTile }}</pre>
 
       <pre>{{ pressedKeys.join(', ') || 'No keys being pressed.' }}</pre>
     </div>
@@ -154,9 +225,7 @@ onMounted(async () => {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #000;
-  // background: v-bind(tileBackground);
-  // background-position: v-bind(genericBackgroundPosition);
+  background: v-bind(worldBackgroundCss);
 
   .map {
     position: absolute;
@@ -171,21 +240,6 @@ onMounted(async () => {
       top: 0;
       width: 100%;
       height: 100%;
-
-      // .layer {
-      //   position: absolute;
-      //   left: 0;
-      //   top: 0;
-      //   display: grid;
-      //   grid-template-columns: v-bind(worldGridTemplateColumns);
-      //   grid-template-rows: v-bind(worldGridTemplateRows);
-      //   grid-column-gap: 0px;
-      //   grid-row-gap: 0px;
-
-      //   .tile {
-      //     background: v-bind(tileBackground);
-      //   }
-      // }
 
       .layer {
         position: absolute;
@@ -206,7 +260,7 @@ onMounted(async () => {
     z-index: 2;
   }
 
-  .hud {
+  .debug {
     position: fixed;
     bottom: 0;
     padding: 10px;
