@@ -1,4 +1,5 @@
-import { computed, type Ref } from 'vue'
+import { computed, ref, watch, type Ref } from 'vue'
+import { useAsyncState } from '@vueuse/core'
 import { world, exteriors, tilesetUrl } from './worldLoader'
 import { copyPixels, createImage2D, getTileImageDataFromIndex, loadTileSet2D } from './tileset'
 import { getPixelsFromIndex } from './positionCalculations'
@@ -21,7 +22,44 @@ const getBackgroundTileDataUrl = (tileSet2D: CanvasRenderingContext2D, tileSetCo
   return tile2D.canvas.toDataURL()
 }
 
-export async function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number>) {
+const preRenderLayerImages = (
+  tileSet2D: CanvasRenderingContext2D,
+  tileSetColumns: number,
+  worldColumns: number,
+  worldWidthPx: number,
+  worldHeightPx: number
+) => {
+  const layerImages: string[] = []
+
+  world.layers.forEach((layer) => {
+    // TODO: use layer class instead?
+    if (layer.name === 'WalkablePath') {
+      return // Don't render this layer
+    }
+
+    const layer2D = createImage2D(worldWidthPx, worldHeightPx)
+
+    for (let i = 0; i < layer.data.length; i++) {
+      const tileImageData = getTileImageDataFromIndex(
+        tileSet2D,
+        layer.data[i],
+        tileSetColumns,
+        world.tilewidth,
+        world.tileheight
+      )
+
+      const pixelPosition = getPixelsFromIndex(i, worldColumns, world.tilewidth, world.tileheight)
+
+      copyPixels(layer2D, ...pixelPosition, tileImageData)
+    }
+
+    layerImages.push(layer2D.canvas.toDataURL())
+  })
+
+  return layerImages
+}
+
+export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number>) {
   // Window
   // TODO: update on resize
   const windowHeight = window.innerHeight
@@ -34,6 +72,8 @@ export async function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<
 
   // World
 
+  // TODO: these could go into the worldLoader module
+
   const worldColumns = world.width
 
   const worldWidthPx = world.width * world.tilewidth
@@ -41,9 +81,32 @@ export async function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<
 
   // Pre-render world layers
 
-  const tileSet2D = await loadTileSet2D(tilesetUrl)
+  const { state: tileSet2D, isLoading: isLoadingTileSet2D } = useAsyncState(
+    loadTileSet2D(tilesetUrl),
+    null
+  )
 
-  const worldBackgroundTileDataUrl = getBackgroundTileDataUrl(tileSet2D, columns)
+  const layerImages = ref<string[]>([])
+
+  watch(tileSet2D, (value) => {
+    if (!value) {
+      return
+    }
+
+    layerImages.value = preRenderLayerImages(
+      value,
+      columns,
+      worldColumns,
+      worldWidthPx,
+      worldHeightPx
+    )
+  })
+
+  const worldBackgroundCss = computed(() =>
+    tileSet2D.value
+      ? `url(${getBackgroundTileDataUrl(tileSet2D.value, columns)}) 0px 0px repeat`
+      : null
+  )
 
   const mapStyle = computed(() => ({
     top: windowHeight / 2 - playerTop.value + 'px',
@@ -52,43 +115,12 @@ export async function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<
     height: worldHeightPx + 'px'
   }))
 
-  const processedLayers: {
-    layer2D: CanvasRenderingContext2D
-    dataUrl: string
-  }[] = []
-
-  world.layers.forEach((layer) => {
-    if (layer.name === 'WalkablePath') {
-      return // Don't render this layer
-    }
-
-    const layer2D = createImage2D(worldWidthPx, worldHeightPx)
-
-    for (let i = 0; i < layer.data.length; i++) {
-      const tileImageData = getTileImageDataFromIndex(
-        tileSet2D,
-        layer.data[i],
-        columns,
-        world.tilewidth,
-        world.tileheight
-      )
-
-      const pixelPosition = getPixelsFromIndex(i, worldColumns, world.tilewidth, world.tileheight)
-
-      copyPixels(layer2D, ...pixelPosition, tileImageData)
-    }
-
-    processedLayers.push({
-      layer2D,
-      dataUrl: layer2D.canvas.toDataURL()
-    })
-  })
+  const isLoading = computed(() => isLoadingTileSet2D.value || !layerImages.value.length)
 
   return {
-    world,
-    columns,
-    worldBackgroundTileDataUrl,
+    isLoading,
+    worldBackgroundCss,
     mapStyle,
-    processedLayers
+    layerImages
   }
 }
