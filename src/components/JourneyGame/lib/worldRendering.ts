@@ -57,18 +57,8 @@ export async function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<
     dataUrl: string
   }[] = []
 
-  let walkableTiles: { [key: number]: boolean } = {}
-
   world.layers.forEach((layer) => {
     if (layer.name === 'WalkablePath') {
-      walkableTiles = layer.data.reduce((result, value, index) => {
-        if (value) {
-          result[index] = true
-        }
-
-        return result
-      }, {} as { [key: number]: boolean })
-
       return // Don't render this layer
     }
 
@@ -99,7 +89,6 @@ export async function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<
     columns,
     worldBackgroundTileDataUrl,
     mapStyle,
-    processedLayers,
-    walkableTiles
+    processedLayers
   }
 }
