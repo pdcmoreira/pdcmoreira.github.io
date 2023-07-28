@@ -4,6 +4,7 @@ import { useKeyDetection } from './lib/keyDetection'
 import { useActiveKeyActions } from './lib/activeKeyActions'
 import { useWorldRendering } from './lib/worldRendering'
 import { getIndexFromPixels, getPositionFromPixels } from './lib/positionCalculations'
+import { usePlayerMovement } from './lib/playerMovement'
 
 const { pressedKeys } = useKeyDetection()
 
@@ -15,7 +16,6 @@ let loading = ref(true)
 
 const playerWidth = 32
 const playerHeight = 32
-const movementSpeed = 3
 
 // Player position relative to the world
 // TODO: load initial positions from some map property?
@@ -46,20 +46,19 @@ const debugPlayerPosition = computed(
   () => `${debugPlayerX.value}, ${debugPlayerY.value} (${playerLeft.value}px, ${playerTop.value}px)`
 )
 
-const getTargetPixels = (startPixels: number, direction: number, tileSize: number) =>
-  direction
-    ? (direction > 0 ? Math.floor : Math.ceil)((startPixels + tileSize * direction) / tileSize) *
-      tileSize
-    : null
-
-const isMovementComplete = (currentPixels: number, targetPixels: number, direction: number) =>
-  currentPixels === targetPixels ||
-  (direction < 0 && targetPixels > currentPixels) ||
-  (direction > 0 && targetPixels < currentPixels)
-
 onMounted(async () => {
-  const { world, worldBackgroundTileDataUrl, mapStyle, processedLayers, walkableTiles } =
-    await useWorldRendering(playerTop, playerLeft)
+  const { world, worldBackgroundTileDataUrl, mapStyle, processedLayers } = await useWorldRendering(
+    playerTop,
+    playerLeft
+  )
+
+  const { updateMovement } = usePlayerMovement(
+    playerLeft,
+    playerTop,
+    movementX,
+    movementY,
+    lastActivatedAxis
+  )
 
   worldBackgroundCss = `url(${worldBackgroundTileDataUrl}) 0px 0px repeat`
 
@@ -68,30 +67,6 @@ onMounted(async () => {
   layerImages = processedLayers.map((layer) => layer.dataUrl)
 
   loading.value = false
-
-  const axisMovement = {
-    x: {
-      playerPixels: playerLeft,
-      movement: movementX,
-      lastMovement: 0,
-      movementSize: world.tilewidth
-    },
-
-    y: {
-      playerPixels: playerTop,
-      movement: movementY,
-      lastMovement: 0,
-      movementSize: world.tileheight
-    }
-  }
-
-  const movementTarget: {
-    axis: 'x' | 'y' | null
-    pixels: number | null
-  } = {
-    axis: null,
-    pixels: null
-  }
 
   function gameLoop() {
     // TODO:
@@ -113,62 +88,7 @@ onMounted(async () => {
       debugPlayerY.value = playerY
     }
 
-    // Always keep lastMovement up to date
-    ;(['x', 'y'] as ['x', 'y']).forEach((axis) => {
-      axisMovement[axis].lastMovement =
-        axisMovement[axis].movement.value || axisMovement[axis].lastMovement
-    })
-
-    const resolvePriority = (): ['x', 'y'] | ['y', 'x'] =>
-      lastActivatedAxis.value === 'y' ? ['y', 'x'] : ['x', 'y']
-
-    // Process movementTarget
-    resolvePriority().forEach((axis) => {
-      if (movementTarget.axis || !axisMovement[axis].movement.value) {
-        return
-      }
-
-      movementTarget.pixels = getTargetPixels(
-        axisMovement[axis].playerPixels.value,
-        axisMovement[axis].lastMovement,
-        axisMovement[axis].movementSize
-      )
-
-      if (
-        movementTarget.pixels !== null &&
-        walkableTiles[
-          getIndexFromPixels(
-            axis === 'x' ? movementTarget.pixels : axisMovement.x.playerPixels.value,
-            axis === 'y' ? movementTarget.pixels : axisMovement.y.playerPixels.value,
-            world.tilewidth,
-            world.tileheight,
-            world.width
-          )
-        ]
-      ) {
-        movementTarget.axis = axis
-      }
-    })
-
-    // Execute movement
-
-    if (movementTarget.axis && movementTarget.pixels !== null) {
-      axisMovement[movementTarget.axis].playerPixels.value +=
-        axisMovement[movementTarget.axis].lastMovement * movementSpeed
-
-      if (
-        isMovementComplete(
-          axisMovement[movementTarget.axis].playerPixels.value,
-          movementTarget.pixels,
-          axisMovement[movementTarget.axis].lastMovement
-        )
-      ) {
-        axisMovement[movementTarget.axis].playerPixels.value = movementTarget.pixels
-
-        movementTarget.axis = null
-        movementTarget.pixels = null
-      }
-    }
+    updateMovement()
 
     currentTile.value = getIndexFromPixels(
       playerLeft.value,
