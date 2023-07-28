@@ -1,18 +1,14 @@
 <script setup lang="ts">
-import { onMounted, ref, type ComputedRef, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useKeyDetection } from './lib/keyDetection'
 import { useActiveKeyActions } from './lib/activeKeyActions'
 import { useWorldRendering } from './lib/worldRendering'
-import { getIndexFromPixels, getPositionFromPixels } from './lib/positionCalculations'
 import { usePlayerMovement } from './lib/playerMovement'
+import { useDebug } from './lib/debug'
 
 const { pressedKeys } = useKeyDetection()
 
 const { movementX, movementY, lastActivatedAxis } = useActiveKeyActions(pressedKeys.value)
-
-let debugEnabled = ref(true)
-
-let loading = ref(true)
 
 const playerWidth = 32
 const playerHeight = 32
@@ -22,81 +18,35 @@ const playerHeight = 32
 let playerTop = ref(51 * 32)
 let playerLeft = ref(27 * 32)
 
-let worldBackgroundCss: string | null = null
+const {
+  enabled: debugEnabled,
+  rows: debugRows,
+  updateDebug
+} = useDebug(playerLeft, playerTop, movementX, movementY, pressedKeys)
 
-let worldMapStyle:
-  | ComputedRef<{
-      top: string
-      left: string
-    }>
-  | undefined = undefined
-
-let layerImages: string[] = []
-
-let currentTile = ref<number | null>(null)
-
-let playerX = 0
-let playerY = 0
-
-// TODO: extract composable with debug stuff
-let debugPlayerX = ref(0)
-let debugPlayerY = ref(0)
-
-const debugPlayerPosition = computed(
-  () => `${debugPlayerX.value}, ${debugPlayerY.value} (${playerLeft.value}px, ${playerTop.value}px)`
+const { isLoading, worldBackgroundCss, mapStyle, layerImages } = useWorldRendering(
+  playerTop,
+  playerLeft
 )
 
+const { updateMovement } = usePlayerMovement(
+  playerLeft,
+  playerTop,
+  movementX,
+  movementY,
+  lastActivatedAxis
+)
+
+debugEnabled.value = true
+
 onMounted(async () => {
-  const { world, worldBackgroundTileDataUrl, mapStyle, processedLayers } = await useWorldRendering(
-    playerTop,
-    playerLeft
-  )
-
-  const { updateMovement } = usePlayerMovement(
-    playerLeft,
-    playerTop,
-    movementX,
-    movementY,
-    lastActivatedAxis
-  )
-
-  worldBackgroundCss = `url(${worldBackgroundTileDataUrl}) 0px 0px repeat`
-
-  worldMapStyle = mapStyle
-
-  layerImages = processedLayers.map((layer) => layer.dataUrl)
-
-  loading.value = false
-
   function gameLoop() {
     // TODO:
     // maybe abstract the gameLoop setup
-    // extract stuff by purpose
-    // remove new var declarations here
-
-    // TODO: maybe should go with player mid point instead?
-    // getCollidingPositionFromPixels
-    ;[playerX, playerY] = getPositionFromPixels(
-      playerLeft.value,
-      playerTop.value,
-      world.tilewidth,
-      world.tileheight
-    )
-
-    if (debugEnabled.value) {
-      debugPlayerX.value = playerX
-      debugPlayerY.value = playerY
-    }
 
     updateMovement()
 
-    currentTile.value = getIndexFromPixels(
-      playerLeft.value,
-      playerTop.value,
-      world.tilewidth,
-      world.tileheight,
-      world.width
-    )
+    updateDebug()
 
     requestAnimationFrame(gameLoop)
   }
@@ -106,8 +56,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="!loading" class="journey-game">
-    <div class="map" :style="worldMapStyle">
+  <div v-if="!isLoading" class="journey-game">
+    <div class="map" :style="mapStyle">
       <div class="layers-container">
         <div
           v-for="(image, index) in layerImages"
@@ -127,13 +77,7 @@ onMounted(async () => {
     </div>
 
     <div v-if="debugEnabled" class="debug">
-      <pre>Player movement: {{ movementX }}, {{ movementY }}</pre>
-
-      <pre>Player position: {{ debugPlayerPosition }}</pre>
-
-      <pre>Current tile: {{ currentTile }}</pre>
-
-      <pre>{{ pressedKeys.join(', ') || 'No keys being pressed.' }}</pre>
+      <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>
     </div>
   </div>
 
