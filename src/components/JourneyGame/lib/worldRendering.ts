@@ -1,7 +1,8 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { useAsyncState } from '@vueuse/core'
+import { copyPixels, createImage2D } from './canvas'
 import { world, exteriors, tilesetUrl } from './worldLoader'
-import { copyPixels, createImage2D, getTileImageDataFromIndex, loadTileSet2D } from './tileset'
+import { getTileImageDataFromIndex, loadTileSet2D } from './tileset'
 import { getPixelsFromIndex } from './positionCalculations'
 
 const backgroundTileId = 663
@@ -37,7 +38,7 @@ const preRenderLayerImages = (
       return // Don't render this layer
     }
 
-    const layer2D = createImage2D(worldWidthPx, worldHeightPx)
+    const layer2D = createImage2D(worldWidthPx, worldHeightPx, true)
 
     for (let i = 0; i < layer.data.length; i++) {
       const tileImageData = getTileImageDataFromIndex(
