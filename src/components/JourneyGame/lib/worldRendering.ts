@@ -68,8 +68,7 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
 
   // Tileset
 
-  // TODO: rename to tileset columns
-  const columns = exteriors.columns // exteriors.imagewidth / exteriors.tilewidth
+  const tileSetColumns = exteriors.columns
 
   // World
 
@@ -96,7 +95,7 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
 
     layerImages.value = preRenderLayerImages(
       value,
-      columns,
+      tileSetColumns,
       worldColumns,
       worldWidthPx,
       worldHeightPx
@@ -105,7 +104,7 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
 
   const worldBackgroundCss = computed(() =>
     tileSet2D.value
-      ? `url(${getBackgroundTileDataUrl(tileSet2D.value, columns)}) 0px 0px repeat`
+      ? `url(${getBackgroundTileDataUrl(tileSet2D.value, tileSetColumns)}) 0px 0px repeat`
       : null
   )
 
