@@ -57,26 +57,28 @@ useGameLoop(() => {
 </script>
 
 <template>
-  <div v-if="!isLoading" class="journey-game">
-    <div class="map" :style="mapStyle">
-      <div class="layers-container">
-        <div
-          v-for="(image, index) in layerImages"
-          :key="index"
-          class="layer"
-          :style="{ 'z-index': index, background: `url(${image}) 0px 0px no-repeat` }"
-        />
+  <div class="journey-game">
+    <div v-if="isLoading" class="loading">Loading...</div>
+
+    <template v-else>
+      <div class="map" :style="mapStyle">
+        <div class="layers-container">
+          <div
+            v-for="(image, index) in layerImages"
+            :key="index"
+            class="layer"
+            :style="{ 'z-index': index, background: `url(${image}) 0px 0px no-repeat` }"
+          />
+        </div>
+
+        <div class="player" :style="playerStyle" />
       </div>
 
-      <div class="player" :style="playerStyle" />
-    </div>
-
-    <div v-if="debugEnabled" class="debug">
-      <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>
-    </div>
+      <div v-if="debugEnabled" class="debug">
+        <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>
+      </div>
+    </template>
   </div>
-
-  <div v-else>Loading...</div>
 </template>
 
 <style lang="less">
