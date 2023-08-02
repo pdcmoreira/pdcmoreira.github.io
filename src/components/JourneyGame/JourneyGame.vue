@@ -6,11 +6,13 @@ import { useWorldRendering } from './lib/worldRendering'
 import { usePlayerMovement } from './lib/playerMovement'
 import { useDebug } from './lib/debug'
 import { useGameLoop } from './lib/gameLoop'
+import { usePlayerRendering } from './lib/playerRendering'
 
 const { pressedKeys } = useKeyDetection()
 
 const { movementX, movementY, lastActivatedAxis } = useActiveKeyActions(pressedKeys.value)
 
+// TODO: remove this
 const playerWidth = 32
 const playerHeight = 32
 
@@ -30,7 +32,7 @@ const { isLoading, worldBackgroundCss, mapStyle, layerImages } = useWorldRenderi
   playerLeft
 )
 
-const { updateMovement } = usePlayerMovement(
+const { updateMovement, movementAxis, movementDirection } = usePlayerMovement(
   playerLeft,
   playerTop,
   movementX,
@@ -38,10 +40,21 @@ const { updateMovement } = usePlayerMovement(
   lastActivatedAxis
 )
 
+const {
+  playerBackgroundCss,
+  playerHeightCss,
+  playerWidthCss,
+  playerStyle,
+  playerSpriteAnimation,
+  updatePlayer
+} = usePlayerRendering(playerTop, playerLeft, movementAxis, movementDirection)
+
 debugEnabled.value = true
 
 useGameLoop(() => {
   updateMovement()
+
+  updatePlayer()
 
   updateDebug()
 })
@@ -59,13 +72,7 @@ useGameLoop(() => {
         />
       </div>
 
-      <div
-        class="player"
-        :style="{
-          top: playerTop + 'px',
-          left: playerLeft + 'px'
-        }"
-      />
+      <div class="player" :style="playerStyle" />
     </div>
 
     <div v-if="debugEnabled" class="debug">
@@ -76,7 +83,7 @@ useGameLoop(() => {
   <div v-else>Loading...</div>
 </template>
 
-<style lang="less" scoped>
+<style lang="less">
 .journey-game {
   width: 100%;
   height: 100%;
@@ -108,12 +115,20 @@ useGameLoop(() => {
   }
 
   .player {
+    @keyframes player-sprite {
+      from {
+        background-position: v-bind('playerSpriteAnimation.from');
+      }
+      to {
+        background-position: v-bind('playerSpriteAnimation.to');
+      }
+    }
+
     position: absolute;
-    width: 32px;
-    height: 32px;
-    border-radius: 100%;
-    background: red;
     z-index: 2;
+    background: v-bind(playerBackgroundCss);
+    height: v-bind(playerHeightCss);
+    width: v-bind(playerWidthCss);
   }
 
   .debug {

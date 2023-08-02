@@ -1,6 +1,9 @@
 import { computed, ref, watch } from 'vue'
 import { flatKeyMap } from './keyMappings'
-import type { Action } from './types'
+import type { Action, NullableAxis, DirectionOrStationary } from './types'
+
+const ensureDirectionValue = (value: number) =>
+  ([0, 1, -1].includes(value) ? value : 0) as DirectionOrStationary
 
 export function useActiveKeyActions(activeKeys: string[]) {
   const activeActions = computed(() => activeKeys.map((key) => flatKeyMap[key]))
@@ -8,15 +11,15 @@ export function useActiveKeyActions(activeKeys: string[]) {
   const getActiveValue = <T>(action: Action, activeValue: T, inactiveValue: T) =>
     activeActions.value.includes(action) ? activeValue : inactiveValue
 
-  const movementX = computed(
-    () => getActiveValue('moveLeft', -1, 0) + getActiveValue('moveRight', 1, 0)
+  const movementX = computed(() =>
+    ensureDirectionValue(getActiveValue('moveLeft', -1, 0) + getActiveValue('moveRight', 1, 0))
   )
 
-  const movementY = computed(
-    () => getActiveValue('moveUp', -1, 0) + getActiveValue('moveDown', 1, 0)
+  const movementY = computed(() =>
+    ensureDirectionValue(getActiveValue('moveUp', -1, 0) + getActiveValue('moveDown', 1, 0))
   )
 
-  const lastActivatedAxis = ref<'x' | 'y' | null>(null)
+  const lastActivatedAxis = ref<NullableAxis>(null)
 
   watch(movementX, (value) => {
     if (value) {
