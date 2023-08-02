@@ -12,10 +12,6 @@ const { pressedKeys } = useKeyDetection()
 
 const { movementX, movementY, lastActivatedAxis } = useActiveKeyActions(pressedKeys.value)
 
-// TODO: remove this
-const playerWidth = 32
-const playerHeight = 32
-
 // Player position relative to the world
 // TODO: load initial positions from some map property?
 let playerTop = ref(51 * 32)
