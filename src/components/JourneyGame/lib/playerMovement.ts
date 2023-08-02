@@ -1,6 +1,7 @@
-import type { ComputedRef, Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { world } from './worldLoader'
 import { getIndexFromPixels } from './positionCalculations'
+import type { NullableAxis, DirectionOrStationary } from './types'
 
 const movementSpeed = 3
 
@@ -34,9 +35,9 @@ const isMovementComplete = (currentPixels: number, targetPixels: number, directi
 export function usePlayerMovement(
   playerLeft: Ref<number>,
   playerTop: Ref<number>,
-  movementX: ComputedRef<number>,
-  movementY: ComputedRef<number>,
-  lastActivatedAxis: Ref<'x' | 'y' | null>
+  movementX: Ref<DirectionOrStationary>,
+  movementY: Ref<DirectionOrStationary>,
+  lastActivatedAxis: Ref<NullableAxis>
 ) {
   const walkableTiles = getWalkableTiles()
 
@@ -45,19 +46,23 @@ export function usePlayerMovement(
     x: {
       playerPixels: playerLeft,
       movement: movementX,
-      lastMovement: 0,
+      lastMovement: 0 as DirectionOrStationary,
       movementSize: world.tilewidth
     },
 
     y: {
       playerPixels: playerTop,
       movement: movementY,
-      lastMovement: 0,
+      lastMovement: 0 as DirectionOrStationary,
       movementSize: world.tileheight
     }
   }
 
-  let targetAxis: 'x' | 'y' | null = null
+  const movementAxis = ref<NullableAxis>(null)
+
+  const movementDirection = computed(() =>
+    movementAxis.value ? axisMovement[movementAxis.value].lastMovement : 0
+  )
 
   let targetPixels: number | null = null
 
@@ -73,7 +78,7 @@ export function usePlayerMovement(
 
     // Resolve movement target
     resolvePriority().forEach((axis) => {
-      if (targetAxis || !axisMovement[axis].movement.value) {
+      if (movementAxis.value || !axisMovement[axis].movement.value) {
         return
       }
 
@@ -95,29 +100,29 @@ export function usePlayerMovement(
           )
         ]
       ) {
-        targetAxis = axis
+        movementAxis.value = axis
       }
     })
 
     // Execute movement
-    if (targetAxis && targetPixels !== null) {
-      axisMovement[targetAxis].playerPixels.value +=
-        axisMovement[targetAxis].lastMovement * movementSpeed
+    if (movementAxis.value && targetPixels !== null) {
+      axisMovement[movementAxis.value].playerPixels.value +=
+        axisMovement[movementAxis.value].lastMovement * movementSpeed
 
       if (
         isMovementComplete(
-          axisMovement[targetAxis].playerPixels.value,
+          axisMovement[movementAxis.value].playerPixels.value,
           targetPixels,
-          axisMovement[targetAxis].lastMovement
+          axisMovement[movementAxis.value].lastMovement
         )
       ) {
-        axisMovement[targetAxis].playerPixels.value = targetPixels
+        axisMovement[movementAxis.value].playerPixels.value = targetPixels
 
-        targetAxis = null
+        movementAxis.value = null
         targetPixels = null
       }
     }
   }
 
-  return { updateMovement }
+  return { updateMovement, movementAxis, movementDirection }
 }
