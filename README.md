@@ -38,8 +38,6 @@ pnpm lint
 - Gameplay state
   - Free
   - Locked (for running dialogue, scripts, etc), which limits user input (ex: "next line of dialogue")
-- Player sprites, animated according to movement
-- Action keys 
 
 ## Bugs
 
