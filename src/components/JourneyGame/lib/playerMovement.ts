@@ -1,9 +1,16 @@
 import { computed, ref, type Ref } from 'vue'
+import { isNotNull } from '@/utilities/typeAssertions'
 import { world } from './worldLoader'
 import { getIndexFromPixels } from './positionCalculations'
-import type { NullableAxis, DirectionOrStationary } from './types'
+import type { NullableAxis, DirectionOrStationary, Axis, Direction } from './types'
 
 const movementSpeed = 3
+
+type TargetMovement = {
+  pixels: number
+  axis: Axis
+  direction: Direction
+} | null
 
 const getWalkableTiles = () => {
   const walkablePathLayer = world.layers.find(({ name }) => name === 'WalkablePath')
@@ -41,87 +48,125 @@ export function usePlayerMovement(
 ) {
   const walkableTiles = getWalkableTiles()
 
-  // Movement state per axis
+  // Movement state refs per axis
   const axisMovement = {
     x: {
       playerPixels: playerLeft,
       movement: movementX,
-      lastMovement: 0 as DirectionOrStationary,
       movementSize: world.tilewidth
     },
 
     y: {
       playerPixels: playerTop,
       movement: movementY,
-      lastMovement: 0 as DirectionOrStationary,
       movementSize: world.tileheight
     }
   }
 
-  const movementAxis = ref<NullableAxis>(null)
+  // Resolve non-null axis priority based on the last activated one
+  const axisActivation = computed(() => {
+    const current: Axis = lastActivatedAxis.value || 'y'
 
-  const movementDirection = computed(() =>
-    movementAxis.value ? axisMovement[movementAxis.value].lastMovement : 0
+    const other: Axis = current === 'y' ? 'x' : 'y'
+
+    return [current, other]
+  })
+
+  // Resolve currently wanted movement based on axis priority
+  const wantedMovements = computed(() =>
+    axisActivation.value
+      .map((axis) =>
+        axisMovement[axis].movement.value
+          ? { axis, direction: axisMovement[axis].movement.value as Direction }
+          : null
+      )
+      .filter(isNotNull)
   )
 
-  let targetPixels: number | null = null
+  // All variables (even auxiliary) are declared outside the loopable update method, to prevent
+  // multiple allocations
 
-  const resolvePriority = (): ['x', 'y'] | ['y', 'x'] =>
-    lastActivatedAxis.value === 'y' ? ['y', 'x'] : ['x', 'y']
+  let wantedTarget: TargetMovement = null
+
+  // Auxiliary variable
+  let resolvedPixels: number | null = null
+
+  let currentTarget: TargetMovement = null
+
+  // Output
+
+  const movementAxis = ref<NullableAxis>(null)
+
+  const movementDirection = ref<DirectionOrStationary>(0)
 
   const updateMovement = () => {
-    // Always keep lastMovement up to date
-    ;(['x', 'y'] as ['x', 'y']).forEach((axis) => {
-      axisMovement[axis].lastMovement =
-        axisMovement[axis].movement.value || axisMovement[axis].lastMovement
-    })
-
-    // Resolve movement target
-    resolvePriority().forEach((axis) => {
-      if (movementAxis.value || !axisMovement[axis].movement.value) {
+    // Resolve the first valid wanted target, from the priority-based wantedMovements
+    wantedMovements.value.forEach(({ axis, direction }) => {
+      // Only proceed if no other wanted movement (for a different axis) took precedence.
+      if (wantedTarget) {
         return
       }
 
-      targetPixels = getTargetPixels(
+      // Get the target tile in pixels
+      resolvedPixels = getTargetPixels(
         axisMovement[axis].playerPixels.value,
-        axisMovement[axis].lastMovement,
+        direction,
         axisMovement[axis].movementSize
       )
 
+      // Discard if the calculated target tile is not walkable
       if (
-        targetPixels !== null &&
-        walkableTiles[
+        !resolvedPixels ||
+        !walkableTiles[
           getIndexFromPixels(
-            axis === 'x' ? targetPixels : axisMovement.x.playerPixels.value,
-            axis === 'y' ? targetPixels : axisMovement.y.playerPixels.value,
+            axis === 'x' ? resolvedPixels : axisMovement.x.playerPixels.value,
+            axis === 'y' ? resolvedPixels : axisMovement.y.playerPixels.value,
             world.tilewidth,
             world.tileheight,
             world.width
           )
         ]
       ) {
-        movementAxis.value = axis
+        return
+      }
+
+      wantedTarget = {
+        axis,
+        direction,
+        pixels: resolvedPixels
       }
     })
 
-    // Execute movement
-    if (movementAxis.value && targetPixels !== null) {
-      axisMovement[movementAxis.value].playerPixels.value +=
-        axisMovement[movementAxis.value].lastMovement * movementSpeed
+    if (
+      currentTarget &&
+      isMovementComplete(
+        axisMovement[currentTarget.axis].playerPixels.value,
+        currentTarget.pixels,
+        currentTarget.direction
+      )
+    ) {
+      axisMovement[currentTarget.axis].playerPixels.value = currentTarget.pixels
 
-      if (
-        isMovementComplete(
-          axisMovement[movementAxis.value].playerPixels.value,
-          targetPixels,
-          axisMovement[movementAxis.value].lastMovement
-        )
-      ) {
-        axisMovement[movementAxis.value].playerPixels.value = targetPixels
-
-        movementAxis.value = null
-        targetPixels = null
-      }
+      currentTarget = null
     }
+
+    if (wantedTarget && (!currentTarget || currentTarget.axis === wantedTarget.axis)) {
+      currentTarget = wantedTarget
+    }
+
+    // Keep output refs up to date
+
+    movementAxis.value = currentTarget?.axis || null
+
+    movementDirection.value = currentTarget?.direction || 0
+
+    // Execute movement
+    if (movementAxis.value && movementDirection.value) {
+      axisMovement[movementAxis.value].playerPixels.value += movementDirection.value * movementSpeed
+    }
+
+    // Reset the wanted target, so it can be re-evaluated in the next iteration
+    wantedTarget = null
   }
 
   return { updateMovement, movementAxis, movementDirection }
