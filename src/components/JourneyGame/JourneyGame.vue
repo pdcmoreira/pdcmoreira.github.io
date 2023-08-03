@@ -15,7 +15,7 @@ const { movementX, movementY, lastActivatedAxis } = useActiveKeyActions(pressedK
 // Player position relative to the world
 // TODO: load initial positions from some map property?
 let playerTop = ref(51 * 32)
-let playerLeft = ref(27 * 32)
+let playerLeft = ref(28 * 32)
 
 const {
   enabled: debugEnabled,
