@@ -15,13 +15,14 @@ type TargetMovement = {
 const getWalkableTiles = () => {
   const walkablePathLayer = world.layers.find(({ name }) => name === 'WalkablePath')
 
-  if (!walkablePathLayer) {
+  if (!walkablePathLayer?.data) {
     return {}
   }
 
   return walkablePathLayer.data.reduce((result, value, index) => {
     if (value) {
-      result[index] = true
+      // Index is 1-based
+      result[index + 1] = true
     }
 
     return result

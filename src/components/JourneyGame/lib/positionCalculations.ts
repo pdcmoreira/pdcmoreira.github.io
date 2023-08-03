@@ -1,6 +1,6 @@
 export const getPositionFromIndex = (index: number, columns: number): [x: number, y: number] => [
-  (index % columns) - 1,
-  Math.floor(index / columns)
+  (index - 1) % columns,
+  Math.floor((index - 1) / columns)
 ]
 
 export const getPositionFromPixels = (
