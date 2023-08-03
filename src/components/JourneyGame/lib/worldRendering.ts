@@ -49,7 +49,12 @@ const preRenderLayerImages = (
         world.tileheight
       )
 
-      const pixelPosition = getPixelsFromIndex(i, worldColumns, world.tilewidth, world.tileheight)
+      const pixelPosition = getPixelsFromIndex(
+        i + 1, // Index is 1-based
+        worldColumns,
+        world.tilewidth,
+        world.tileheight
+      )
 
       copyPixels(layer2D, ...pixelPosition, tileImageData)
     }
