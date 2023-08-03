@@ -33,9 +33,9 @@ const preRenderLayerImages = (
   const layerImages: string[] = []
 
   world.layers.forEach((layer) => {
-    // TODO: use layer class instead?
-    if (layer.name === 'WalkablePath') {
-      return // Don't render this layer
+    // Ignore non-tile and utility layers
+    if (layer.type !== 'tilelayer' || !layer.data || layer.class === 'utility') {
+      return
     }
 
     const layer2D = createImage2D(worldWidthPx, worldHeightPx, true)
