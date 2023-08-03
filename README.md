@@ -34,10 +34,12 @@ pnpm lint
 
 ### Features
 
-- Game screens (main menu, gameplay, end screen)
-- Gameplay state
-  - Free
-  - Locked (for running dialogue, scripts, etc), which limits user input (ex: "next line of dialogue")
+- Add door interactions
+- Add structures' texts (object layer?)
+- Prettier loading
+- Add some contact/social info
+- Add the "boring version" page and proper link styling
+- Add some hints at the start for movement, leaving the "game" itself as free-roaming
 
 ## Bugs
 
