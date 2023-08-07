@@ -39,8 +39,8 @@ const getAnimationFrames = (axis: Axis, direction: Direction, animation: string)
   playerAnimationMap[animation][axis][direction]
 
 export function usePlayerRendering(
-  playerTop: Ref<number>,
   playerLeft: Ref<number>,
+  playerTop: Ref<number>,
   axis: Ref<NullableAxis>,
   direction: Ref<DirectionOrStationary>
 ) {

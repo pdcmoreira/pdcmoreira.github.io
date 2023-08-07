@@ -43,7 +43,7 @@ const {
   playerStyle,
   playerSpriteAnimation,
   updatePlayer
-} = usePlayerRendering(playerTop, playerLeft, movementAxis, movementDirection)
+} = usePlayerRendering(playerLeft, playerTop, movementAxis, movementDirection)
 
 debugEnabled.value = true
 
