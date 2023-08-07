@@ -1,6 +1,6 @@
 import { computed, ref, type Ref } from 'vue'
 import { isNotNull } from '@/utilities/typeAssertions'
-import { world } from './worldLoader'
+import { world, findLayer } from './worldLoader'
 import { getIndexFromPixels } from './positionCalculations'
 import type { NullableAxis, DirectionOrStationary, Axis, Direction } from './types'
 
@@ -13,7 +13,7 @@ type TargetMovement = {
 } | null
 
 const getWalkableTiles = () => {
-  const walkablePathLayer = world.layers.find(({ name }) => name === 'WalkablePath')
+  const walkablePathLayer = findLayer('WalkablePath')
 
   if (!walkablePathLayer?.data) {
     return {}
