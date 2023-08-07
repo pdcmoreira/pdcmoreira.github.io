@@ -89,10 +89,11 @@ export function usePlayerMovement(
 
   let wantedTarget: TargetMovement = null
 
-  // Auxiliary variable
-  let resolvedPixels: number | null = null
-
   let currentTarget: TargetMovement = null
+
+  // Auxiliary variables
+
+  let resolvedTargetPixels: number | null = null
 
   // Output
 
@@ -109,7 +110,7 @@ export function usePlayerMovement(
       }
 
       // Get the target tile in pixels
-      resolvedPixels = getTargetPixels(
+      resolvedTargetPixels = getTargetPixels(
         axisMovement[axis].playerPixels.value,
         direction,
         axisMovement[axis].movementSize
@@ -117,11 +118,11 @@ export function usePlayerMovement(
 
       // Discard if the calculated target tile is not walkable
       if (
-        !resolvedPixels ||
+        !resolvedTargetPixels ||
         !walkableTiles[
           getIndexFromPixels(
-            axis === 'x' ? resolvedPixels : axisMovement.x.playerPixels.value,
-            axis === 'y' ? resolvedPixels : axisMovement.y.playerPixels.value,
+            axis === 'x' ? resolvedTargetPixels : axisMovement.x.playerPixels.value,
+            axis === 'y' ? resolvedTargetPixels : axisMovement.y.playerPixels.value,
             world.tilewidth,
             world.tileheight,
             world.width
@@ -134,7 +135,7 @@ export function usePlayerMovement(
       wantedTarget = {
         axis,
         direction,
-        pixels: resolvedPixels
+        pixels: resolvedTargetPixels
       }
     })
 
