@@ -102,11 +102,26 @@ export function usePlayerMovement(
   const movementDirection = ref<DirectionOrStationary>(0)
 
   const updateMovement = () => {
+    // Clear the currentTarget if it has already completed
+    if (
+      currentTarget &&
+      isMovementComplete(
+        axisMovement[currentTarget.axis].playerPixels.value,
+        currentTarget.pixels,
+        currentTarget.direction
+      )
+    ) {
+      axisMovement[currentTarget.axis].playerPixels.value = currentTarget.pixels
+
+      currentTarget = null
+    }
+
     // Resolve the first valid wanted target, from the priority-based wantedMovements
-    wantedMovements.value.forEach(({ axis, direction }) => {
+    wantedMovements.value.some(({ axis, direction }) => {
       // Only proceed if no other wanted movement (for a different axis) took precedence.
+      // Otherwise end the loop.
       if (wantedTarget) {
-        return
+        return true
       }
 
       // Get the target tile in pixels
@@ -139,24 +154,12 @@ export function usePlayerMovement(
       }
     })
 
-    if (
-      currentTarget &&
-      isMovementComplete(
-        axisMovement[currentTarget.axis].playerPixels.value,
-        currentTarget.pixels,
-        currentTarget.direction
-      )
-    ) {
-      axisMovement[currentTarget.axis].playerPixels.value = currentTarget.pixels
-
-      currentTarget = null
-    }
-
+    // Set the current target (or change it if we're only changing direction in the same axis)
     if (wantedTarget && (!currentTarget || currentTarget.axis === wantedTarget.axis)) {
       currentTarget = wantedTarget
     }
 
-    // Keep output refs up to date
+    // Update the output refs with the actual movement that will be executed
 
     movementAxis.value = currentTarget?.axis || null
 
@@ -164,7 +167,22 @@ export function usePlayerMovement(
 
     // Execute movement
     if (movementAxis.value && movementDirection.value) {
-      axisMovement[movementAxis.value].playerPixels.value += movementDirection.value * movementSpeed
+      // Resolve what would be the final position after adding the movement speed
+      resolvedTargetPixels =
+        axisMovement[movementAxis.value].playerPixels.value +
+        movementDirection.value * movementSpeed
+
+      // Adjust the calculation if it goes beyond the target
+      if (
+        currentTarget &&
+        !wantedTarget &&
+        isMovementComplete(resolvedTargetPixels, currentTarget.pixels, movementDirection.value)
+      ) {
+        resolvedTargetPixels = currentTarget.pixels
+      }
+
+      // Update the position with the final calculation
+      axisMovement[movementAxis.value].playerPixels.value = resolvedTargetPixels
     }
 
     // Reset the wanted target, so it can be re-evaluated in the next iteration
