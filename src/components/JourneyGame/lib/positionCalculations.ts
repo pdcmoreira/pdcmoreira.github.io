@@ -34,22 +34,3 @@ export const getPixelsFromIndex = (
   tileHeight: number
 ): [x: number, y: number] =>
   getPixelsFromPosition(...getPositionFromIndex(index, columns), tileWidth, tileHeight)
-
-export const getCollidingPositionFromPixels = (
-  pointX: number,
-  pointY: number,
-  tileWidth: number,
-  tileHeight: number
-): [x: number, y: number] => [Math.floor(pointX / tileWidth), Math.floor(pointY / tileHeight)]
-
-export const getCollidingIndex = (
-  pointX: number,
-  pointY: number,
-  tileWidth: number,
-  tileHeight: number,
-  columns: number
-) =>
-  getIndexFromPosition(
-    ...getCollidingPositionFromPixels(pointX, pointY, tileWidth, tileHeight),
-    columns
-  )
