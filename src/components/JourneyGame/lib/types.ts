@@ -27,3 +27,12 @@ export type AnimationMap = {
     }
   }
 }
+
+export type Interaction = {
+  name: string
+  type: string
+}
+
+export type BooleanDictionary = {
+  [key: string]: boolean
+}

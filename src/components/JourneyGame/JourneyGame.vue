@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useKeyDetection } from './lib/keyDetection'
 import { useActiveKeyActions } from './lib/activeKeyActions'
 import { useWorldRendering } from './lib/worldRendering'
@@ -7,28 +6,25 @@ import { usePlayerMovement } from './lib/playerMovement'
 import { useDebug } from './lib/debug'
 import { useGameLoop } from './lib/gameLoop'
 import { usePlayerRendering } from './lib/playerRendering'
+import { useTileInteractions } from './lib/tileInteractions'
+import { useInitializeState } from './lib/initializeState'
+import { usePopup } from './lib/popup'
+import { useTileInteractionHandler } from './lib/tileInteractionHandler'
+
+const { playerLeft, playerTop, visitedCompanies } = useInitializeState()
+
+const { isPopupOpen, popupTitle, popupMessages, openPopup, closePopup } = usePopup()
 
 const { pressedKeys } = useKeyDetection()
 
 const { movementX, movementY, lastActivatedAxis } = useActiveKeyActions(pressedKeys.value)
-
-// Player position relative to the world
-// TODO: load initial positions from some map property?
-let playerTop = ref(51 * 32)
-let playerLeft = ref(28 * 32)
-
-const {
-  enabled: debugEnabled,
-  rows: debugRows,
-  updateDebug
-} = useDebug(playerLeft, playerTop, movementX, movementY, pressedKeys)
 
 const { isLoading, worldBackgroundCss, mapStyle, layerImages } = useWorldRendering(
   playerTop,
   playerLeft
 )
 
-const { updateMovement, movementAxis, movementDirection } = usePlayerMovement(
+const { movementAxis, movementDirection, updateMovement } = usePlayerMovement(
   playerLeft,
   playerTop,
   movementX,
@@ -45,12 +41,27 @@ const {
   updatePlayer
 } = usePlayerRendering(playerLeft, playerTop, movementAxis, movementDirection)
 
+const { updateTileInteractions, currentTileInteraction } = useTileInteractions(
+  playerLeft,
+  playerTop
+)
+
+useTileInteractionHandler(currentTileInteraction, visitedCompanies, openPopup, closePopup)
+
+const {
+  enabled: debugEnabled,
+  rows: debugRows,
+  updateDebug
+} = useDebug(playerLeft, playerTop, movementX, movementY, pressedKeys)
+
 debugEnabled.value = true
 
 useGameLoop(() => {
   updateMovement()
 
   updatePlayer()
+
+  updateTileInteractions()
 
   updateDebug()
 })
@@ -72,6 +83,14 @@ useGameLoop(() => {
         </div>
 
         <div class="player" :style="playerStyle" />
+      </div>
+
+      <div v-if="isPopupOpen" class="popup">
+        <h1>{{ popupTitle }}</h1>
+
+        <p v-for="(message, index) in popupMessages" :key="index">
+          {{ message }}
+        </p>
       </div>
 
       <div v-if="debugEnabled" class="debug">
@@ -127,6 +146,18 @@ useGameLoop(() => {
     background: v-bind(playerBackgroundCss);
     height: v-bind(playerHeightCss);
     width: v-bind(playerWidthCss);
+  }
+
+  .popup {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    top: calc(50% - 150px);
+    left: calc(50% - 150px);
+    background: #fff;
+    border: 4px solid #666;
+    z-index: 20;
+    opacity: 0.75;
   }
 
   .debug {
