@@ -34,7 +34,6 @@ pnpm lint
 
 ### Features
 
-- Add door interactions
 - Add structures' texts (object layer?)
 - Prettier loading
 - Add some contact/social info
