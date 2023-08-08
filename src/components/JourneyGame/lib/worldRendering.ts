@@ -1,5 +1,4 @@
 import { computed, ref, watch, type Ref } from 'vue'
-import { useAsyncState } from '@vueuse/core'
 import { copyPixels, createImage2D } from './canvas'
 import { world, exteriors, tilesetUrl } from './worldLoader'
 import { getTileImageDataFromIndex, loadTileSet2D } from './tileset'
@@ -86,10 +85,11 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
 
   // Pre-render world layers
 
-  const { state: tileSet2D, isLoading: isLoadingTileSet2D } = useAsyncState(
-    loadTileSet2D(tilesetUrl),
-    null
-  )
+  const tileSet2D = ref<CanvasRenderingContext2D | null>(null)
+
+  loadTileSet2D(tilesetUrl).then((result) => {
+    tileSet2D.value = result
+  })
 
   const layerImages = ref<string[]>([])
 
@@ -98,13 +98,17 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
       return
     }
 
-    layerImages.value = preRenderLayerImages(
-      value,
-      tileSetColumns,
-      worldColumns,
-      worldWidthPx,
-      worldHeightPx
-    )
+    // Defer the preRenderLayerImages' execution so that it doesn't block the UI for other stuff
+    // that is initializing
+    setTimeout(() => {
+      layerImages.value = preRenderLayerImages(
+        value,
+        tileSetColumns,
+        worldColumns,
+        worldWidthPx,
+        worldHeightPx
+      )
+    }, 0)
   })
 
   const worldBackgroundCss = computed(() =>
@@ -120,7 +124,7 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
     height: worldHeightPx + 'px'
   }))
 
-  const isLoading = computed(() => isLoadingTileSet2D.value || !layerImages.value.length)
+  const isLoading = computed(() => !layerImages.value.length)
 
   return {
     isLoading,
