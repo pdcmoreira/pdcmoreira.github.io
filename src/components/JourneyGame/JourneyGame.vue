@@ -10,6 +10,7 @@ import { useTileInteractions } from './lib/tileInteractions'
 import { useInitializeState } from './lib/initializeState'
 import { usePopup } from './lib/popup'
 import { useTileInteractionHandler } from './lib/tileInteractionHandler'
+import GamePopup from './GamePopup.vue'
 
 const { playerLeft, playerTop, visitedCompanies } = useInitializeState()
 
@@ -85,13 +86,7 @@ useGameLoop(() => {
         <div class="player" :style="playerStyle" />
       </div>
 
-      <div v-if="isPopupOpen" class="popup">
-        <h1>{{ popupTitle }}</h1>
-
-        <p v-for="(message, index) in popupMessages" :key="index">
-          {{ message }}
-        </p>
-      </div>
+      <GamePopup v-if="isPopupOpen" :title="popupTitle" :messages="popupMessages" />
 
       <div v-if="debugEnabled" class="debug">
         <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>
@@ -102,10 +97,26 @@ useGameLoop(() => {
 
 <style lang="less">
 .journey-game {
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
   width: 100%;
   height: 100%;
   overflow: hidden;
   background: v-bind(worldBackgroundCss);
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  color: #212529;
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    font-weight: bold;
+    font-size: 1.6rem;
+  }
 
   .map {
     position: absolute;
@@ -146,18 +157,6 @@ useGameLoop(() => {
     background: v-bind(playerBackgroundCss);
     height: v-bind(playerHeightCss);
     width: v-bind(playerWidthCss);
-  }
-
-  .popup {
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    top: calc(50% - 150px);
-    left: calc(50% - 150px);
-    background: #fff;
-    border: 4px solid #666;
-    z-index: 20;
-    opacity: 0.75;
   }
 
   .debug {
