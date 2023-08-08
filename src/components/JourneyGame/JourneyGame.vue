@@ -97,8 +97,6 @@ useGameLoop(() => {
 
 <style lang="less">
 .journey-game {
-  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -113,9 +111,10 @@ useGameLoop(() => {
     align-items: center;
     width: 100%;
     height: 100%;
-    background: #fff;
+    background: #000;
     font-weight: bold;
     font-size: 1.6rem;
+    color: #fff;
   }
 
   .map {
