@@ -564,6 +564,51 @@
       "width": 50,
       "x": 0,
       "y": 0
+    },
+    {
+      "draworder": "topdown",
+      "id": 11,
+      "name": "Interactions",
+      "objects": [
+        {
+          "height": 32,
+          "id": 9,
+          "name": "screen-in",
+          "rotation": 0,
+          "type": "company",
+          "visible": true,
+          "width": 32,
+          "x": 1056,
+          "y": 1408
+        },
+        {
+          "height": 32,
+          "id": 10,
+          "name": "ideias-dinamicas",
+          "rotation": 0,
+          "type": "company",
+          "visible": true,
+          "width": 32,
+          "x": 1088,
+          "y": 672
+        },
+        {
+          "height": 32,
+          "id": 11,
+          "name": "knok",
+          "rotation": 0,
+          "type": "company",
+          "visible": true,
+          "width": 32,
+          "x": 608,
+          "y": 352
+        }
+      ],
+      "opacity": 1,
+      "type": "objectgroup",
+      "visible": true,
+      "x": 0,
+      "y": 0
     }
   ],
   "nextlayerid": 12,
