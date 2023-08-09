@@ -11,6 +11,8 @@ import { useInitializeState } from './lib/initializeState'
 import { usePopup } from './lib/popup'
 import { useTileInteractionHandler } from './lib/tileInteractionHandler'
 import GamePopup from './GamePopup.vue'
+import GameGoalTracker from './GameGoalTracker.vue'
+import { computed } from 'vue'
 
 const { playerLeft, playerTop, visitedCompanies } = useInitializeState()
 
@@ -49,6 +51,12 @@ const { updateTileInteractions, currentTileInteraction } = useTileInteractions(
 
 useTileInteractionHandler(currentTileInteraction, visitedCompanies, openPopup, closePopup)
 
+const companiesCount = computed(() => Object.keys(visitedCompanies).length)
+
+const visitedCompaniesCount = computed(
+  () => Object.values(visitedCompanies).filter((value) => value).length
+)
+
 const {
   enabled: debugEnabled,
   rows: debugRows,
@@ -85,6 +93,8 @@ useGameLoop(() => {
 
         <div class="player" :style="playerStyle" />
       </div>
+
+      <GameGoalTracker :total="companiesCount" :won="visitedCompaniesCount" />
 
       <GamePopup v-if="isPopupOpen" :title="popupTitle" :messages="popupMessages" />
 
