@@ -1,0 +1,29 @@
+{
+  "screen-in": {
+    "name": "Screen-In",
+    "messages": [
+      "Full-stack development of a multi-tenant web app to manage teams and tasks, with time tracking, collaboration and reporting.",
+      "Developed an integration service, connecting commercial POS and ERP softwares.",
+      "Skills: Laravel · jQuery · VB.NET · MySQL · MSSQL"
+    ]
+  },
+  "ideias-dinamicas": {
+    "name": "Ideias Dinâmicas",
+    "messages": [
+      "Full-stack development in multiple languages / frameworks, for multiple projects.",
+      "Played an important role in defining and consolidating what became the main tech stack and architecture used in new apps.",
+      "Led a small team in one of the company's biggest projects (at the time).",
+      "Skills: Vue.js · .NET Core · PostgreSQL · MSSQL · Laravel"
+    ]
+  },
+  "knok": {
+    "name": "Knok Healthcare",
+    "messages": [
+      "Frontend development of the company's main product, playing an important role in defining technical solutions for the frontend, within a multidisciplinary team.",
+      "Extensive integration of Vonage Video API, payment gateways and flows, real-time communication, RTL support",
+      "Tech stack maintenance, including Vue 2 → Vue 3 migration",
+      "DX improvements with custom tooling",
+      "Skills: Vue.js · TypeScript / JavaScript · CI · Storybook · GitHub Actions"
+    ]
+  }
+}
