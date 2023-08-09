@@ -43,3 +43,9 @@ pnpm lint
 ## Bugs
 
 - Force releasing active keys when window loses focus (other window clicked or right click during movement)
+
+## Assets
+
+- Tile set: [Modern Exteriors by LimeZu](https://limezu.itch.io/modernexteriors)
+- In-game font: [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P)
+- Medal icon: [From OpenGameArt](https://opengameart.org/node/121141)
