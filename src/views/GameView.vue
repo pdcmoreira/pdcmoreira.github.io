@@ -12,7 +12,8 @@ import SourceLink from '@/components/SourceLink.vue'
 
     <SourceLink />
 
-    <RouterLink to="/boring-mode" class="boring-mode-link">Boring version →</RouterLink>
+    <!-- TODO -->
+    <!-- <RouterLink to="/boring-mode" class="boring-mode-link">Boring version →</RouterLink> -->
   </div>
 </template>
 
