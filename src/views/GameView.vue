@@ -36,7 +36,7 @@ import SourceLink from '@/components/SourceLink.vue'
 
   .source {
     position: fixed;
-    top: 6px;
+    bottom: 6px;
     right: 6px;
     z-index: 20;
   }
