@@ -142,6 +142,12 @@ useGameLoop(() => {
   }
 
   .player {
+    position: absolute;
+    z-index: 2;
+    background: v-bind(playerBackgroundCss);
+    height: v-bind(playerHeightCss);
+    width: v-bind(playerWidthCss);
+
     @keyframes player-sprite {
       from {
         background-position: v-bind('playerSpriteAnimation.from');
@@ -150,12 +156,6 @@ useGameLoop(() => {
         background-position: v-bind('playerSpriteAnimation.to');
       }
     }
-
-    position: absolute;
-    z-index: 2;
-    background: v-bind(playerBackgroundCss);
-    height: v-bind(playerHeightCss);
-    width: v-bind(playerWidthCss);
   }
 
   .debug {
