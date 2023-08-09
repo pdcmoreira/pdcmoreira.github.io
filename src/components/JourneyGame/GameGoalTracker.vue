@@ -24,7 +24,7 @@ defineProps({
 <style lang="less">
 .game-goal-tracker {
   position: absolute;
-  top: 100px;
+  top: 80px;
   left: 30px;
   z-index: 20;
 
