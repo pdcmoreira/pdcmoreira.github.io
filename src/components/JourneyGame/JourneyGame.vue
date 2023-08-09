@@ -55,7 +55,7 @@ const {
   updateDebug
 } = useDebug(playerLeft, playerTop, movementX, movementY, pressedKeys)
 
-debugEnabled.value = true
+debugEnabled.value = import.meta.env.VITE_DEBUG_ENABLED || false
 
 useGameLoop(() => {
   updateMovement()
