@@ -11,6 +11,8 @@ import SourceLink from '@/components/SourceLink.vue'
     <ContactInfo />
 
     <SourceLink />
+
+    <RouterLink to="/boring-mode" class="boring-mode-link">Boring version →</RouterLink>
   </div>
 </template>
 
@@ -36,6 +38,15 @@ import SourceLink from '@/components/SourceLink.vue'
     top: 6px;
     right: 6px;
     z-index: 20;
+  }
+
+  .boring-mode-link {
+    position: fixed;
+    bottom: 6px;
+    right: 6px;
+    text-align: right;
+    color: #fff;
+    text-decoration: none;
   }
 }
 </style>
