@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ContentBox from './ContentBox.vue'
+import GameBox from './GameBox.vue'
 import medalIconUrl from './assets/medal.png'
 
 defineProps({
@@ -16,9 +16,9 @@ defineProps({
 </script>
 
 <template>
-  <ContentBox title="Visited" class="game-goal-tracker">
+  <GameBox title="Visited" class="game-goal-tracker">
     <img v-for="n in total" :key="n" :src="medalIconUrl" class="medal" :class="{ won: n <= won }" />
-  </ContentBox>
+  </GameBox>
 </template>
 
 <style lang="less">

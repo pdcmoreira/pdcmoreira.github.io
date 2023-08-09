@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, type PropType } from 'vue'
-import ContentBox from './ContentBox.vue'
+import GameBox from './GameBox.vue'
 
 const props = defineProps({
   title: {
@@ -21,11 +21,11 @@ const resolvedMessages = computed(() =>
 
 <template>
   <div class="game-popup">
-    <ContentBox :title="title">
+    <GameBox :title="title">
       <p v-for="(message, index) in resolvedMessages" :key="index">
         {{ message }}
       </p>
-    </ContentBox>
+    </GameBox>
   </div>
 </template>
 
@@ -41,7 +41,7 @@ const resolvedMessages = computed(() =>
   height: 100%;
   z-index: 20;
 
-  .content-box {
+  .game-box {
     opacity: 0.85;
     width: 450px;
 
