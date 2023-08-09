@@ -1,1 +1,7 @@
-@import 'reset.css'
+@import 'reset.css';
+
+body {
+  font-family: Arial;
+  font-size: 14px;
+  color: #212529;
+}
