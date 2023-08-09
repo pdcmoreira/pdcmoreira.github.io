@@ -29,3 +29,17 @@ pnpm test:unit
 ```sh
 pnpm lint
 ```
+
+## TODO
+
+### Features
+
+- Add structures' texts (object layer?)
+- Add some contact/social info
+- Add the "boring version" page and proper link styling
+- Add some hints at the start for movement, leaving the "game" itself as free-roaming
+- Sound
+
+## Bugs
+
+- Force releasing active keys when window loses focus (other window clicked or right click during movement)
