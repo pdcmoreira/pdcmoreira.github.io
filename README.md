@@ -35,7 +35,7 @@ pnpm lint
 ### Features
 
 - Add structures' texts (object layer?)
-- Add some contact/social info
+- Add controls for mobile devices
 - Add the "boring version" page and proper link styling
 - Add some hints at the start for movement, leaving the "game" itself as free-roaming
 - Sound
