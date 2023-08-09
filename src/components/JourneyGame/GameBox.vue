@@ -10,7 +10,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="content-box">
+  <div class="game-box">
     <div v-if="title" class="title">
       {{ title }}
     </div>
@@ -22,7 +22,7 @@ defineProps({
 </template>
 
 <style lang="less">
-.content-box {
+.game-box {
   background: #fff;
   padding: 0.8rem 1.6rem;
   border: 4px solid #000;
