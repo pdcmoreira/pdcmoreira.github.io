@@ -13,8 +13,9 @@ import { useTileInteractionHandler } from './lib/tileInteractionHandler'
 import GamePopup from './GamePopup.vue'
 import GameGoalTracker from './GameGoalTracker.vue'
 import { computed } from 'vue'
+import VictoryBox from './VictoryBox.vue'
 
-const { playerLeft, playerTop, visitedCompanies } = useInitializeState()
+const { playerLeft, playerTop, visitedCompanies, reset } = useInitializeState()
 
 const { isPopupOpen, popupTitle, popupMessages, openPopup, closePopup } = usePopup()
 
@@ -57,6 +58,10 @@ const visitedCompaniesCount = computed(
   () => Object.values(visitedCompanies).filter((value) => value).length
 )
 
+const showVictory = computed(
+  () => visitedCompaniesCount.value === companiesCount.value && !currentTileInteraction.value
+)
+
 const {
   enabled: debugEnabled,
   rows: debugRows,
@@ -97,6 +102,8 @@ useGameLoop(() => {
       <GameGoalTracker :total="companiesCount" :won="visitedCompaniesCount" />
 
       <GamePopup v-if="isPopupOpen" :title="popupTitle" :messages="popupMessages" />
+
+      <VictoryBox v-if="showVictory" @click:restart="reset" />
 
       <div v-if="debugEnabled" class="debug">
         <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>
