@@ -1,8 +1,6 @@
 export type MovementAction = 'moveLeft' | 'moveDown' | 'moveRight' | 'moveUp'
 
-export type TriggerActions = 'main'
-
-export type Action = MovementAction | TriggerActions
+export type Action = MovementAction
 
 export type KeyMap = { [key in Action]: string[] }
 
