@@ -1,5 +1,5 @@
 import { reactive, ref } from 'vue'
-import type { BooleanDictionary, Interaction } from './types'
+import type { BooleanDictionary, Interaction } from '@/types'
 import { workExperience } from './workExperience'
 
 export const getInitialPlayerPosition = (): [x: number, y: number] => [28 * 32, 51 * 32]

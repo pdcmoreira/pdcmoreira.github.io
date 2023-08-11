@@ -1,6 +1,6 @@
 import { watch, type Ref } from 'vue'
 import { getExperience } from './workExperience'
-import type { BooleanDictionary, Interaction } from './types'
+import type { BooleanDictionary, Interaction } from '@/types'
 
 export function useTileInteractionHandler(
   currentTileInteraction: Ref<Interaction | null>,

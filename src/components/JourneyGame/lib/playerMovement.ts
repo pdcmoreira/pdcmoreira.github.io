@@ -2,7 +2,7 @@ import { computed, ref, type Ref } from 'vue'
 import { isNotNull } from '@/utilities/typeAssertions'
 import { world, findLayer } from './worldLoader'
 import { getIndexFromPixels } from './positionCalculations'
-import type { NullableAxis, DirectionOrStationary, Axis, Direction } from './types'
+import type { NullableAxis, DirectionOrStationary, Axis, Direction } from '@/types'
 
 const movementSpeed = 3
 

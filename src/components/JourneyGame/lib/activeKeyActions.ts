@@ -1,6 +1,6 @@
 import { computed, ref, watch } from 'vue'
 import { flatKeyMap } from './keyMappings'
-import type { Action, NullableAxis, DirectionOrStationary } from './types'
+import type { Action, NullableAxis, DirectionOrStationary } from '@/types'
 
 const ensureDirectionValue = (value: number) =>
   ([0, 1, -1].includes(value) ? value : 0) as DirectionOrStationary
