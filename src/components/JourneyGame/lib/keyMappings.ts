@@ -1,5 +1,4 @@
-import type { KeyMap } from './types'
-import type { Action, FlatKeyMap } from './types'
+import type { Action, KeyMap, FlatKeyMap } from '@/types'
 
 export const keyMappings: KeyMap = {
   moveLeft: ['a', 'A', 'ArrowLeft'],

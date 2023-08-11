@@ -1,7 +1,7 @@
 import { ref, type Ref } from 'vue'
 import { world, findLayer } from './worldLoader'
 import { getIndexFromPixels } from './positionCalculations'
-import type { Interaction } from './types'
+import type { Interaction } from '@/types'
 
 const getInteractionTiles = () => {
   const interactions = findLayer('Interactions')?.objects || []
