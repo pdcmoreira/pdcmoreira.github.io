@@ -4,7 +4,6 @@
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,
-    "allowJs": true, // TODO: disallow
     "resolveJsonModule": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -13,7 +12,8 @@
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@types": ["./types/*"]
     }
   }
 }

@@ -49,3 +49,6 @@ pnpm lint
 - Tile set: [Modern Exteriors by LimeZu](https://limezu.itch.io/modernexteriors)
 - In-game font: [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P)
 - Medal icon: [From OpenGameArt](https://opengameart.org/node/121141)
+- D-Pad graphic: [Guillaume Berry @ TheNounProject](https://thenounproject.com/icon/control-pad-40359/)
+- GamePad toggle icon: [Kiran Shastry @ TheNounProject](https://thenounproject.com/icon/gamepad-1393017/)
+- Caret icon: [Alice Design @ TheNounProject](https://thenounproject.com/icon/arrow-1921080/)

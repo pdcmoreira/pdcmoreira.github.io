@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useKeyDetection } from './lib/keyDetection'
+import { useTouchControls } from './lib/useTouchControls'
 import { useActiveKeyActions } from './lib/activeKeyActions'
 import { useWorldRendering } from './lib/worldRendering'
 import { usePlayerMovement } from './lib/playerMovement'
@@ -12,8 +14,9 @@ import { usePopup } from './lib/popup'
 import { useTileInteractionHandler } from './lib/tileInteractionHandler'
 import GamePopup from './GamePopup.vue'
 import GameGoalTracker from './GameGoalTracker.vue'
-import { computed } from 'vue'
 import VictoryBox from './VictoryBox.vue'
+import DPad from './DPad.vue'
+import DPadToggle from './DPadToggle.vue'
 
 const { playerLeft, playerTop, visitedCompanies, reset } = useInitializeState()
 
@@ -21,7 +24,11 @@ const { isPopupOpen, popupTitle, popupMessages, openPopup, closePopup } = usePop
 
 const { pressedKeys } = useKeyDetection()
 
-const { movementX, movementY, lastActivatedAxis } = useActiveKeyActions(pressedKeys.value)
+const { showVirtualGamePad, pressedDPadKeys } = useTouchControls()
+
+const activeKeys = computed(() => [...pressedKeys.value, ...pressedDPadKeys.value])
+
+const { movementX, movementY, lastActivatedAxis } = useActiveKeyActions(activeKeys)
 
 const { isLoading, worldBackgroundCss, mapStyle, layerImages } = useWorldRendering(
   playerTop,
@@ -66,9 +73,9 @@ const {
   enabled: debugEnabled,
   rows: debugRows,
   updateDebug
-} = useDebug(playerLeft, playerTop, movementX, movementY, pressedKeys)
+} = useDebug(playerLeft, playerTop, movementX, movementY, activeKeys)
 
-debugEnabled.value = import.meta.env.VITE_DEBUG_ENABLED || false
+debugEnabled.value = import.meta.env.VITE_DEBUG_ENABLED === 'true'
 
 useGameLoop(() => {
   updateMovement()
@@ -108,6 +115,14 @@ useGameLoop(() => {
       <div v-if="debugEnabled" class="debug">
         <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>
       </div>
+
+      <DPadToggle v-model="showVirtualGamePad" />
+
+      <DPad
+        v-if="showVirtualGamePad"
+        :debug="debugEnabled"
+        @update:pressed-keys="pressedDPadKeys = $event"
+      />
     </template>
   </div>
 </template>
@@ -122,7 +137,7 @@ useGameLoop(() => {
   font-size: 12px;
   color: #212529;
 
-  .loading {
+  & > .loading {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -134,21 +149,21 @@ useGameLoop(() => {
     color: #fff;
   }
 
-  .map {
+  & > .map {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
 
-    .layers-container {
+    & > .layers-container {
       position: relative;
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
 
-      .layer {
+      & > .layer {
         position: absolute;
         left: 0;
         top: 0;
@@ -156,30 +171,48 @@ useGameLoop(() => {
         height: 100%;
       }
     }
-  }
 
-  .player {
-    position: absolute;
-    z-index: 2;
-    background: v-bind(playerBackgroundCss);
-    height: v-bind(playerHeightCss);
-    width: v-bind(playerWidthCss);
+    & > .player {
+      position: absolute;
+      z-index: 2;
+      background: v-bind(playerBackgroundCss);
+      height: v-bind(playerHeightCss);
+      width: v-bind(playerWidthCss);
 
-    @keyframes player-sprite {
-      from {
-        background-position: v-bind('playerSpriteAnimation.from');
-      }
-      to {
-        background-position: v-bind('playerSpriteAnimation.to');
+      @keyframes player-sprite {
+        from {
+          background-position: v-bind('playerSpriteAnimation.from');
+        }
+        to {
+          background-position: v-bind('playerSpriteAnimation.to');
+        }
       }
     }
   }
 
-  .debug {
+  & > .d-pad-toggle {
+    position: fixed;
+    bottom: 40px;
+    right: 250px;
+    z-index: 35;
+  }
+
+  & > .d-pad {
+    position: fixed;
+    bottom: 40px;
+    right: 65px;
+    z-index: 40;
+  }
+
+  & > .debug {
     position: fixed;
     bottom: 0;
     padding: 10px;
     color: #fff;
+
+    & + .d-pad {
+      bottom: 100px;
+    }
   }
 }
 </style>
