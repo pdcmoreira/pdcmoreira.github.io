@@ -1,11 +1,10 @@
 import type { Action, KeyMap, FlatKeyMap } from '@/types'
 
 export const keyMappings: KeyMap = {
-  moveLeft: ['a', 'A', 'ArrowLeft'],
-  moveDown: ['s', 'S', 'ArrowDown'],
-  moveRight: ['d', 'D', 'ArrowRight'],
-  moveUp: ['w', 'W', 'ArrowUp'],
-  main: [' ', 'Enter']
+  moveLeft: ['a', 'A', 'ArrowLeft', 'DPadLeft'],
+  moveDown: ['s', 'S', 'ArrowDown', 'DPadDown'],
+  moveRight: ['d', 'D', 'ArrowRight', 'DPadRight'],
+  moveUp: ['w', 'W', 'ArrowUp', 'DPadUp']
 }
 
 // Process key mappings into a flat map

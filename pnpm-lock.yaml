@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  point-in-triangle:
+    specifier: ^1.0.1
+    version: 1.0.1
   vue:
     specifier: ^3.3.4
     version: 3.3.4
@@ -2407,6 +2410,10 @@ packages:
       mlly: 1.4.0
       pathe: 1.1.1
     dev: true
+
+  /point-in-triangle@1.0.1:
+    resolution: {integrity: sha512-XPklqT7GaOkCpLe7Zu/LcqfzgHPlFWFfqNvqILUZvyUXRMZohOg9Bi2yg223/kYIZWtDFs8Jy7KpO9IZy+Kbcw==}
+    dev: false
 
   /postcss-selector-parser@6.0.13:
     resolution: {integrity: sha512-EaV1Gl4mUEV4ddhDnv/xtj7sxwrwxdetHdWUGnT4VJQf+4d05v6lHYZr8N573k5Z0BViss7BDhfWtKS3+sfAqQ==}

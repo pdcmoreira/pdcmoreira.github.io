@@ -34,3 +34,7 @@ export type Interaction = {
 export type BooleanDictionary = {
   [key: string]: boolean
 }
+
+export type Point = [x: number, y: number]
+
+export type Triangle = [p1: Point, p2: Point, p3: Point]
