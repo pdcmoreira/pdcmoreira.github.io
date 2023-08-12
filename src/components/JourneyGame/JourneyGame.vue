@@ -24,7 +24,7 @@ const { isPopupOpen, popupTitle, popupMessages, openPopup, closePopup } = usePop
 
 const { pressedKeys } = useKeyDetection()
 
-const { showVirtualGamePad, pressedDPadKeys } = useTouchControls()
+const { allowTouchControls, showVirtualGamePad, pressedDPadKeys } = useTouchControls()
 
 const activeKeys = computed(() => [...pressedKeys.value, ...pressedDPadKeys.value])
 
@@ -116,7 +116,7 @@ useGameLoop(() => {
         <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>
       </div>
 
-      <DPadToggle v-model="showVirtualGamePad" />
+      <DPadToggle v-if="allowTouchControls" v-model="showVirtualGamePad" />
 
       <DPad
         v-if="showVirtualGamePad"
