@@ -70,7 +70,7 @@ export function usePlayerRendering(
 
       left: `${playerLeft.value}px`,
 
-      'background-position': `${-animationFrames.value.x}px ${-animationFrames.value.y}px`, // TODO: test`${-x}px ${-y}px`
+      'background-position': `${-animationFrames.value.x}px ${-animationFrames.value.y}px`,
 
       animation: `player-sprite ${frameDuration}ms steps(${animationFrames.value.length}) infinite`
     }
