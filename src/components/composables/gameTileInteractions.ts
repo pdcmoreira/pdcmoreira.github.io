@@ -1,6 +1,6 @@
 import { ref, type Ref } from 'vue'
-import { world, findLayer } from './worldLoader'
-import { getIndexFromPixels } from './positionCalculations'
+import { world, findLayer } from '@/utilities/gameWorldLoader'
+import { getIndexFromPixels } from '@/utilities/positionCalculations'
 import type { Interaction } from '@/types'
 
 const getInteractionTiles = () => {
@@ -22,7 +22,7 @@ const getInteractionTiles = () => {
   }, {} as { [key: number]: Interaction })
 }
 
-export function useTileInteractions(playerLeft: Ref<number>, playerTop: Ref<number>) {
+export function useGameTileInteractions(playerLeft: Ref<number>, playerTop: Ref<number>) {
   const interactionTiles = getInteractionTiles()
 
   const currentTileInteraction = ref<Interaction | null>(null)

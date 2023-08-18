@@ -5,7 +5,7 @@ export interface Popup {
   messages: string | string[]
 }
 
-export function usePopup() {
+export function useGamePopup() {
   const popup = ref<Popup | null>(null)
 
   const isPopupOpen = computed(() => !!popup.value)

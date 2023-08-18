@@ -1,8 +1,8 @@
 import { computed, ref, type Ref } from 'vue'
-import { getIndexFromPosition, getPositionFromPixels } from './positionCalculations'
-import { world } from './worldLoader'
+import { getIndexFromPosition, getPositionFromPixels } from '@/utilities/positionCalculations'
+import { world } from '@/utilities/gameWorldLoader'
 
-export function useDebug(
+export function useGameDebug(
   playerLeft: Ref<number>,
   playerTop: Ref<number>,
   movementX: Ref<number>,
