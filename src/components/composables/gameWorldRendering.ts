@@ -1,6 +1,13 @@
 import { computed, ref, watch, type Ref } from 'vue'
 import { copyPixels, createImage2D } from '@/utilities/canvas'
-import { world, exteriors, tilesetUrl } from '@/utilities/gameWorldLoader'
+import {
+  tileSetImageUrl,
+  tileSetColumns,
+  world,
+  worldColumns,
+  worldWidthPx,
+  worldHeightPx
+} from '@/utilities/gameWorldLoader'
 import { getTileImageDataFromIndex, loadTileSet2D } from '@/utilities/tileset'
 import { getPixelsFromIndex } from '@/utilities/positionCalculations'
 import { useWindowSize } from './windowSize'
@@ -68,24 +75,11 @@ const preRenderLayerImages = (
 export function useGameWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number>) {
   const { windowWidth, windowHeight } = useWindowSize()
 
-  // Tileset
-
-  const tileSetColumns = exteriors.columns
-
-  // World
-
-  // TODO: these could go into the worldLoader module
-
-  const worldColumns = world.width
-
-  const worldWidthPx = world.width * world.tilewidth
-  const worldHeightPx = world.height * world.tileheight
-
   // Pre-render world layers
 
   const tileSet2D = ref<CanvasRenderingContext2D | null>(null)
 
-  loadTileSet2D(tilesetUrl).then((result) => {
+  loadTileSet2D(tileSetImageUrl).then((result) => {
     tileSet2D.value = result
   })
 
