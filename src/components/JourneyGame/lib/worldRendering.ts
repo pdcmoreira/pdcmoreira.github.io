@@ -3,6 +3,7 @@ import { copyPixels, createImage2D } from './canvas'
 import { world, exteriors, tilesetUrl } from './worldLoader'
 import { getTileImageDataFromIndex, loadTileSet2D } from './tileset'
 import { getPixelsFromIndex } from './positionCalculations'
+import { useWindowSize } from './windowSize'
 
 const backgroundTileId = 663
 
@@ -65,10 +66,7 @@ const preRenderLayerImages = (
 }
 
 export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number>) {
-  // Window
-  // TODO: update on resize
-  const windowHeight = window.innerHeight
-  const windowWidth = window.innerWidth
+  const { windowWidth, windowHeight } = useWindowSize()
 
   // Tileset
 
@@ -118,8 +116,8 @@ export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number
   )
 
   const mapStyle = computed(() => ({
-    top: windowHeight / 2 - playerTop.value + 'px',
-    left: windowWidth / 2 - playerLeft.value + 'px',
+    left: windowWidth.value / 2 - playerLeft.value + 'px',
+    top: windowHeight.value / 2 - playerTop.value + 'px',
     width: worldWidthPx + 'px',
     height: worldHeightPx + 'px'
   }))
