@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   point-in-triangle:
     specifier: ^1.0.1
     version: 1.0.1
@@ -21,6 +24,9 @@ devDependencies:
   '@types/jsdom':
     specifier: ^21.1.1
     version: 21.1.1
+  '@types/lodash':
+    specifier: ^4.14.197
+    version: 4.14.197
   '@types/node':
     specifier: ^18.16.17
     version: 18.16.17
@@ -412,6 +418,10 @@ packages:
 
   /@types/json-schema@7.0.12:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
+    dev: true
+
+  /@types/lodash@4.14.197:
+    resolution: {integrity: sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==}
     dev: true
 
   /@types/node@18.16.17:
@@ -2056,7 +2066,6 @@ packages:
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
-    dev: true
 
   /loupe@2.3.6:
     resolution: {integrity: sha512-RaPMZKiMy8/JruncMU5Bt6na1eftNoo++R4Y+N2FrxkDVTrGvcyzFTsaGif4QTeKESheMGegbhw6iUAq+5A8zA==}
