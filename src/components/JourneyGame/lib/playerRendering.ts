@@ -1,5 +1,5 @@
 import { computed, ref, type Ref } from 'vue'
-import tilesetUrl from '../assets/character_tileset.png'
+import tilesetUrl from '@/assets/game/character_tileset.png'
 import type { AnimationMap, Axis, Direction, DirectionOrStationary, NullableAxis } from '@/types'
 import { getPixelsFromPosition } from './positionCalculations'
 import { world } from './worldLoader'
