@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
 import type { BooleanDictionary, Interaction } from '@/types'
-import { workExperience } from './workExperience'
+import { workExperience } from '@/utilities/gameWorkExperienceLoader'
 
 export const getInitialPlayerPosition = (): [x: number, y: number] => [28 * 32, 51 * 32]
 
@@ -11,7 +11,7 @@ export const getVisitedCompaniesInitialState = () =>
     return result
   }, {} as BooleanDictionary)
 
-export function useInitializeState() {
+export function useGameState() {
   // Player position relative to the world
   const playerLeft = ref(0)
   const playerTop = ref(0)

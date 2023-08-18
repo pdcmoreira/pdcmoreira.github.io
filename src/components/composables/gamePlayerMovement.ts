@@ -1,7 +1,7 @@
 import { computed, ref, type Ref } from 'vue'
 import { isNotNull } from '@/utilities/typeAssertions'
-import { world, findLayer } from './worldLoader'
-import { getIndexFromPixels } from './positionCalculations'
+import { world, findLayer } from '@/utilities/gameWorldLoader'
+import { getIndexFromPixels } from '@/utilities/positionCalculations'
 import type { NullableAxis, DirectionOrStationary, Axis, Direction } from '@/types'
 
 const movementSpeed = 3
@@ -40,7 +40,7 @@ const isMovementComplete = (currentPixels: number, targetPixels: number, directi
   (direction < 0 && targetPixels > currentPixels) ||
   (direction > 0 && targetPixels < currentPixels)
 
-export function usePlayerMovement(
+export function useGamePlayerMovement(
   playerLeft: Ref<number>,
   playerTop: Ref<number>,
   movementX: Ref<DirectionOrStationary>,

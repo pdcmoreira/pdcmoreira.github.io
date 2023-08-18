@@ -1,5 +1,5 @@
-import { createImage2D } from './canvas'
-import { getPixelsFromIndex } from './positionCalculations'
+import { createImage2D } from '@/utilities/canvas'
+import { getPixelsFromIndex } from '@/utilities/positionCalculations'
 
 export const loadTileSet2D = async (url: string) => {
   const img = new Image()

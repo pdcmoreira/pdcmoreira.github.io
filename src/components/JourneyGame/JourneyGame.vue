@@ -1,41 +1,41 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useKeyDetection } from './lib/keyDetection'
-import { useTouchControls } from './lib/useTouchControls'
-import { useActiveKeyActions } from './lib/activeKeyActions'
-import { useWorldRendering } from './lib/worldRendering'
-import { usePlayerMovement } from './lib/playerMovement'
-import { useDebug } from './lib/debug'
-import { useGameLoop } from './lib/gameLoop'
-import { usePlayerRendering } from './lib/playerRendering'
-import { useTileInteractions } from './lib/tileInteractions'
-import { useInitializeState } from './lib/initializeState'
-import { usePopup } from './lib/popup'
-import { useTileInteractionHandler } from './lib/tileInteractionHandler'
+import { useKeyDetection } from '@/components/composables/keyDetection'
+import { useGameTouchControls } from '@/components/composables/gameTouchControls'
+import { useGameKeyActions } from '@/components/composables/gameKeyActions'
+import { useGameWorldRendering } from '@/components/composables/gameWorldRendering'
+import { useGamePlayerMovement } from '@/components/composables/gamePlayerMovement'
+import { useGameDebug } from '@/components/composables/gameDebug'
+import { useGameLoop } from '@/components/composables/gameLoop'
+import { useGamePlayerRendering } from '@/components/composables/gamePlayerRendering'
+import { useGameTileInteractions } from '@/components/composables/gameTileInteractions'
+import { useGameState } from '@/components/composables/gameState'
+import { useGamePopup } from '@/components/composables/gamePopup'
+import { useGameTileInteractionHandling } from '@/components/composables/gameTileInteractionHandling'
 import GamePopup from './GamePopup.vue'
 import GameGoalTracker from './GameGoalTracker.vue'
-import VictoryBox from './VictoryBox.vue'
+import GameVictoryBox from './GameVictoryBox.vue'
 import DPad from './DPad.vue'
 import DPadToggle from './DPadToggle.vue'
 
-const { playerLeft, playerTop, visitedCompanies, reset } = useInitializeState()
+const { playerLeft, playerTop, visitedCompanies, reset } = useGameState()
 
-const { isPopupOpen, popupTitle, popupMessages, openPopup, closePopup } = usePopup()
+const { isPopupOpen, popupTitle, popupMessages, openPopup, closePopup } = useGamePopup()
 
 const { pressedKeys } = useKeyDetection()
 
-const { allowTouchControls, showVirtualGamePad, pressedDPadKeys } = useTouchControls()
+const { allowTouchControls, showVirtualGamePad, pressedDPadKeys } = useGameTouchControls()
 
 const activeKeys = computed(() => [...pressedKeys.value, ...pressedDPadKeys.value])
 
-const { movementX, movementY, lastActivatedAxis } = useActiveKeyActions(activeKeys)
+const { movementX, movementY, lastActivatedAxis } = useGameKeyActions(activeKeys)
 
-const { isLoading, worldBackgroundCss, mapStyle, layerImages } = useWorldRendering(
+const { isLoading, worldBackgroundCss, mapStyle, layerImages } = useGameWorldRendering(
   playerTop,
   playerLeft
 )
 
-const { movementAxis, movementDirection, updateMovement } = usePlayerMovement(
+const { movementAxis, movementDirection, updateMovement } = useGamePlayerMovement(
   playerLeft,
   playerTop,
   movementX,
@@ -50,14 +50,14 @@ const {
   playerStyle,
   playerSpriteAnimation,
   updatePlayer
-} = usePlayerRendering(playerLeft, playerTop, movementAxis, movementDirection)
+} = useGamePlayerRendering(playerLeft, playerTop, movementAxis, movementDirection)
 
-const { updateTileInteractions, currentTileInteraction } = useTileInteractions(
+const { updateTileInteractions, currentTileInteraction } = useGameTileInteractions(
   playerLeft,
   playerTop
 )
 
-useTileInteractionHandler(currentTileInteraction, visitedCompanies, openPopup, closePopup)
+useGameTileInteractionHandling(currentTileInteraction, visitedCompanies, openPopup, closePopup)
 
 const companiesCount = computed(() => Object.keys(visitedCompanies).length)
 
@@ -73,7 +73,7 @@ const {
   enabled: debugEnabled,
   rows: debugRows,
   updateDebug
-} = useDebug(playerLeft, playerTop, movementX, movementY, activeKeys)
+} = useGameDebug(playerLeft, playerTop, movementX, movementY, activeKeys)
 
 debugEnabled.value = import.meta.env.VITE_DEBUG_ENABLED === 'true'
 
@@ -110,7 +110,7 @@ useGameLoop(() => {
 
       <GamePopup v-if="isPopupOpen" :title="popupTitle" :messages="popupMessages" />
 
-      <VictoryBox v-if="showVictory" @click:restart="reset" />
+      <GameVictoryBox v-if="showVictory" @click:restart="reset" />
 
       <div v-if="debugEnabled" class="debug">
         <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>

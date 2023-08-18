@@ -1,8 +1,8 @@
 import { watch, type Ref } from 'vue'
-import { getExperience } from './workExperience'
+import { getExperience } from '@/utilities/gameWorkExperienceLoader'
 import type { BooleanDictionary, Interaction } from '@/types'
 
-export function useTileInteractionHandler(
+export function useGameTileInteractionHandling(
   currentTileInteraction: Ref<Interaction | null>,
   visitedCompanies: BooleanDictionary,
   openPopup: (messages: string | string[], title?: string | null) => void,

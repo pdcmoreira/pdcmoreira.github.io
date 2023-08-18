@@ -1,8 +1,8 @@
 import { computed, ref, type Ref } from 'vue'
 import tilesetUrl from '@/assets/game/character_tileset.png'
 import type { AnimationMap, Axis, Direction, DirectionOrStationary, NullableAxis } from '@/types'
-import { getPixelsFromPosition } from './positionCalculations'
-import { world } from './worldLoader'
+import { getPixelsFromPosition } from '@/utilities/positionCalculations'
+import { world } from '@/utilities/gameWorldLoader'
 
 const widthPixels = 32
 const heightPixels = 64
@@ -38,7 +38,7 @@ const playerAnimationMap: AnimationMap = {
 const getAnimationFrames = (axis: Axis, direction: Direction, animation: string) =>
   playerAnimationMap[animation][axis][direction]
 
-export function usePlayerRendering(
+export function useGamePlayerRendering(
   playerLeft: Ref<number>,
   playerTop: Ref<number>,
   axis: Ref<NullableAxis>,

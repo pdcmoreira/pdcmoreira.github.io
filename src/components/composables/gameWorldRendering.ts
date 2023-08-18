@@ -1,8 +1,8 @@
 import { computed, ref, watch, type Ref } from 'vue'
-import { copyPixels, createImage2D } from './canvas'
-import { world, exteriors, tilesetUrl } from './worldLoader'
-import { getTileImageDataFromIndex, loadTileSet2D } from './tileset'
-import { getPixelsFromIndex } from './positionCalculations'
+import { copyPixels, createImage2D } from '@/utilities/canvas'
+import { world, exteriors, tilesetUrl } from '@/utilities/gameWorldLoader'
+import { getTileImageDataFromIndex, loadTileSet2D } from '@/utilities/tileset'
+import { getPixelsFromIndex } from '@/utilities/positionCalculations'
 import { useWindowSize } from './windowSize'
 
 const backgroundTileId = 663
@@ -65,7 +65,7 @@ const preRenderLayerImages = (
   return layerImages
 }
 
-export function useWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number>) {
+export function useGameWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number>) {
   const { windowWidth, windowHeight } = useWindowSize()
 
   // Tileset

@@ -1,7 +1,7 @@
 import { hasTouchCapability } from '@/utilities/touchDetection'
 import { ref, watch } from 'vue'
 
-export function useTouchControls() {
+export function useGameTouchControls() {
   const allowTouchControls = hasTouchCapability()
 
   const showVirtualGamePad = ref(false)
