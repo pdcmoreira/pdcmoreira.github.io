@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import GameBox from './GameBox.vue'
-import medalIconUrl from './assets/medal.png'
+import medalIconUrl from '@/assets/game/medal.png'
 
 defineProps({
   total: {
