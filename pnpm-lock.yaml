@@ -1,79 +1,83 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   lodash:
-    specifier: ^4.17.21
+    specifier: 4.17.21
     version: 4.17.21
   point-in-triangle:
-    specifier: ^1.0.1
+    specifier: 1.0.1
     version: 1.0.1
   vue:
-    specifier: ^3.3.4
+    specifier: 3.3.4
     version: 3.3.4
   vue-router:
-    specifier: ^4.2.2
+    specifier: 4.2.2
     version: 4.2.2(vue@3.3.4)
 
 devDependencies:
   '@rushstack/eslint-patch':
-    specifier: ^1.2.0
+    specifier: 1.2.0
     version: 1.2.0
   '@tsconfig/node18':
-    specifier: ^2.0.1
+    specifier: 2.0.1
     version: 2.0.1
   '@types/jsdom':
-    specifier: ^21.1.1
+    specifier: 21.1.1
     version: 21.1.1
   '@types/lodash':
-    specifier: ^4.14.197
+    specifier: 4.14.197
     version: 4.14.197
   '@types/node':
-    specifier: ^18.16.17
+    specifier: 18.16.17
     version: 18.16.17
   '@vitejs/plugin-vue':
-    specifier: ^4.2.3
+    specifier: 4.2.3
     version: 4.2.3(vite@4.3.9)(vue@3.3.4)
   '@vue/eslint-config-prettier':
-    specifier: ^7.1.0
+    specifier: 7.1.0
     version: 7.1.0(eslint@8.39.0)(prettier@2.8.8)
   '@vue/eslint-config-typescript':
-    specifier: ^11.0.3
+    specifier: 11.0.3
     version: 11.0.3(eslint-plugin-vue@9.11.0)(eslint@8.39.0)(typescript@5.0.4)
   '@vue/test-utils':
-    specifier: ^2.3.2
+    specifier: 2.3.2
     version: 2.3.2(vue@3.3.4)
   '@vue/tsconfig':
-    specifier: ^0.4.0
+    specifier: 0.4.0
     version: 0.4.0
   eslint:
-    specifier: ^8.39.0
+    specifier: 8.39.0
     version: 8.39.0
   eslint-plugin-vue:
-    specifier: ^9.11.0
+    specifier: 9.11.0
     version: 9.11.0(eslint@8.39.0)
   jsdom:
-    specifier: ^22.1.0
+    specifier: 22.1.0
     version: 22.1.0
   less:
-    specifier: ^4.1.3
+    specifier: 4.1.3
     version: 4.1.3
   npm-run-all:
-    specifier: ^4.1.5
+    specifier: 4.1.5
     version: 4.1.5
   prettier:
-    specifier: ^2.8.8
+    specifier: 2.8.8
     version: 2.8.8
   typescript:
-    specifier: ~5.0.4
+    specifier: 5.0.4
     version: 5.0.4
   vite:
-    specifier: ^4.3.9
+    specifier: 4.3.9
     version: 4.3.9(@types/node@18.16.17)(less@4.1.3)
   vitest:
-    specifier: ^0.32.0
+    specifier: 0.32.0
     version: 0.32.0(jsdom@22.1.0)(less@4.1.3)
   vue-tsc:
-    specifier: ^1.6.5
+    specifier: 1.6.5
     version: 1.6.5(typescript@5.0.4)
 
 packages:
@@ -653,6 +657,7 @@ packages:
 
   /@volar/vue-typescript@1.6.5(typescript@5.0.4):
     resolution: {integrity: sha512-er9rVClS4PHztMUmtPMDTl+7c7JyrxweKSAEe/o/Noeq2bQx6v3/jZHVHBe8ZNUti5ubJL/+Tg8L3bzmlalV8A==}
+    deprecated: 'WARNING: This project has been renamed to @vue/typescript. Install using @vue/typescript instead.'
     peerDependencies:
       typescript: '*'
     dependencies:
@@ -1089,6 +1094,7 @@ packages:
 
   /debug@3.2.7:
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
+    requiresBuild: true
     peerDependencies:
       supports-color: '*'
     peerDependenciesMeta:
@@ -2409,6 +2415,7 @@ packages:
   /pify@4.0.1:
     resolution: {integrity: sha512-uB80kBFb/tfd68bVleG9T5GGsGPjJrLAUpR5PZIrhBnIaRTQRjqdJSsIKkOP6OAIFbj7GOrcudc5pNjZ+geV2g==}
     engines: {node: '>=6'}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -2473,6 +2480,7 @@ packages:
 
   /prr@1.0.1:
     resolution: {integrity: sha512-yPw4Sng1gWghHQWj0B3ZggWUm4qVbPwPFcRG8KyxiU7J2OHFSoEHKS+EZ3fv5l1t9CyCiop6l/ZYeWbrgoQejw==}
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -2581,6 +2589,7 @@ packages:
 
   /sax@1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==}
+    requiresBuild: true
     dev: true
     optional: true
 
