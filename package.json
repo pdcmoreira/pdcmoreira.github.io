@@ -16,7 +16,7 @@
   "dependencies": {
     "lodash": "4.17.21",
     "point-in-triangle": "1.0.1",
-    "vue": "3.3.4",
+    "vue": "3.4.27",
     "vue-router": "4.3.0"
   },
   "devDependencies": {
