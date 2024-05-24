@@ -29,8 +29,8 @@ devDependencies:
     specifier: 21.1.6
     version: 21.1.6
   '@types/lodash':
-    specifier: 4.14.202
-    version: 4.14.202
+    specifier: 4.17.4
+    version: 4.17.4
   '@types/node':
     specifier: 20.12.12
     version: 20.12.12
@@ -577,8 +577,8 @@ packages:
       parse5: 7.1.2
     dev: true
 
-  /@types/lodash@4.14.202:
-    resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
+  /@types/lodash@4.17.4:
+    resolution: {integrity: sha512-wYCP26ZLxaT3R39kiN2+HcJ4kTd3U1waI/cY7ivWYqFP6pW3ZNpvi6Wd6PHZx7T/t8z0vlkXMg3QYLa7DZ/IJQ==}
     dev: true
 
   /@types/node@20.12.12:
