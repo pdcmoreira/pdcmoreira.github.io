@@ -5,6 +5,9 @@
   "compilerOptions": {
     "composite": true,
     "resolveJsonModule": true,
+    // Workaround as described in:
+    // https://github.com/vuejs/tsconfig?tab=readme-ov-file#migrating-from-typescript--50
+    "resolvePackageJsonExports": false,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
