@@ -3,5 +3,34 @@
   "extends": ["config:base"],
   "schedule": ["after 8pm every weekday", "before 7am every weekday"],
   "prConcurrentLimit": 4,
-  "rangeStrategy": "pin"
+  "rangeStrategy": "pin",
+  "packageRules": [
+    {
+      "groupName": "vue-core",
+      "matchPackageNames": [
+        "vue",
+        "vue-router",
+        "@vitejs/plugin-vue",
+        "@vue/eslint-config-prettier",
+        "@vue/eslint-config-typescript",
+        "@vue/test-utils",
+        "@vue/tsconfig",
+        "vue-tsc",
+        "@vue/test-utils",
+        "vitest"
+      ]
+    },
+    {
+      "groupName": "typescript-eslint",
+      "matchPackageNames": [
+        "typescript",
+        "eslint",
+        "eslint-plugin-vue",
+        "@types/node",
+        "@typescript-eslint/eslint-plugin",
+        "@typescript-eslint/parser",
+        "@vue/eslint-config-typescript"
+      ]
+    }
+  ]
 }
