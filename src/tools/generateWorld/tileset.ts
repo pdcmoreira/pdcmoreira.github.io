@@ -1,26 +1,20 @@
-import { createImage2D } from '@/utilities/canvas'
+import type { CanvasRenderingContext2D } from 'canvas'
+import type { TiledTileSet } from './tiledTypes'
 import { getPixelsFromIndex } from '@/utilities/positionCalculations'
+import { loadImageAssetFromPng } from './files'
+import tileSetJson from '@/assets/game/world/exteriors.json'
+import { tileSetImagePath } from './assetsPaths'
 
-export const loadTileSet2D = async (url: string) => {
-  const img = new Image()
+let tileSet2D: CanvasRenderingContext2D | null = null
 
-  img.src = url
+export const tileSet = tileSetJson as TiledTileSet
 
-  if (!img.complete) {
-    await new Promise((resolve) => {
-      img.onload = resolve
-    })
+export const getTileSet2D = async () => {
+  if (!tileSet2D) {
+    tileSet2D = await loadImageAssetFromPng(tileSetImagePath)
   }
 
-  const context = createImage2D(img.width, img.height)
-
-  if (!context) {
-    throw new Error("Couldn't get canvas 2D context")
-  }
-
-  context.drawImage(img, 0, 0)
-
-  return context
+  return tileSet2D
 }
 
 export const getTileImageData = (

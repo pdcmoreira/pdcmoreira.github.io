@@ -1,4 +1,4 @@
-import workExperienceJson from '@/assets/game/workExperience.json'
+import workExperienceJson from '@/assets/workExperience.json'
 
 type Experience = {
   name: string

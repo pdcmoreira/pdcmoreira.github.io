@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.node.json",
+  "compilerOptions": {
+    "composite": true,
+    "module": "NodeNext",
+    "outDir": "dist/tools",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@types": ["./types/*"]
+    }
+  },
+  "include": [
+    "src/tools/**/*",
+    // Shared code between tools and the main app
+    "src/utilities/**/*"
+  ]
+}

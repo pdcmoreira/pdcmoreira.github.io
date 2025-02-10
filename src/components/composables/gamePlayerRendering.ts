@@ -66,7 +66,7 @@ export function useGamePlayerRendering(
     // be wherever above it. So we need the visual rendering to be a bit offset.
 
     return {
-      top: `${playerTop.value - heightPixels + world.tileheight}px`,
+      top: `${playerTop.value - heightPixels + world.tileHeightPx}px`,
 
       left: `${playerLeft.value}px`,
 

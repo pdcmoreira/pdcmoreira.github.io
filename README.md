@@ -6,6 +6,12 @@
 pnpm install
 ```
 
+### Generate the world's assets from Tiled map
+
+```sh
+pnpm gen:world
+```
+
 ### Compile and Hot-Reload for Development
 
 ```sh
@@ -29,6 +35,13 @@ pnpm test:unit
 ```sh
 pnpm lint
 ```
+
+## tsconfig files
+
+- tsconfig.app.json: browser code (Vue app)
+- tsconfig.node.json: Node.js config files (Vite, Vitest, etc)
+- tsconfig.vitest.json: testing
+- tsconfig.tools.json: Node.js tools
 
 ## TODO
 

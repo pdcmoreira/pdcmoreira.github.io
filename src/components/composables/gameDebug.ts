@@ -36,11 +36,11 @@ export function useGameDebug(
     ;[playerX.value, playerY.value] = getPositionFromPixels(
       playerLeft.value,
       playerTop.value,
-      world.tilewidth,
-      world.tileheight
+      world.tileWidthPx,
+      world.tileHeightPx
     )
 
-    currentTile.value = getIndexFromPosition(playerX.value, playerY.value, world.width)
+    currentTile.value = getIndexFromPosition(playerX.value, playerY.value, world.widthPx)
   }
 
   return {
