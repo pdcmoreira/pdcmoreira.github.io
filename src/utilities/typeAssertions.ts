@@ -1,1 +1,1 @@
-export const isNotNull = <T>(something: T): something is NonNullable<T> => !!something
+export const isNotNull = <T>(something: T): something is NonNullable<T> => something != null

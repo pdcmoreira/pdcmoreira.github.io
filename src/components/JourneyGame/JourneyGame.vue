@@ -30,10 +30,7 @@ const activeKeys = computed(() => [...pressedKeys.value, ...pressedDPadKeys.valu
 
 const { movementX, movementY, lastActivatedAxis } = useGameKeyActions(activeKeys)
 
-const { isLoading, worldBackgroundCss, mapStyle, layerImages } = useGameWorldRendering(
-  playerTop,
-  playerLeft
-)
+const { mapStyle, worldBackgroundCss, layersUrls } = useGameWorldRendering(playerTop, playerLeft)
 
 const { movementAxis, movementDirection, updateMovement } = useGamePlayerMovement(
   playerLeft,
@@ -77,6 +74,8 @@ const {
 
 debugEnabled.value = import.meta.env.VITE_DEBUG_ENABLED === 'true'
 
+const isLoading = false
+
 useGameLoop(() => {
   updateMovement()
 
@@ -96,10 +95,10 @@ useGameLoop(() => {
       <div class="map" :style="mapStyle">
         <div class="layers-container">
           <div
-            v-for="(image, index) in layerImages"
-            :key="index"
+            v-for="(url, index) in layersUrls"
+            :key="url"
             class="layer"
-            :style="{ 'z-index': index, background: `url(${image}) 0px 0px no-repeat` }"
+            :style="{ 'z-index': index, background: `url(${url}) 0px 0px no-repeat` }"
           />
         </div>
 

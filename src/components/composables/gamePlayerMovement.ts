@@ -1,6 +1,6 @@
 import { computed, ref, type Ref } from 'vue'
 import { isNotNull } from '@/utilities/typeAssertions'
-import { world, findLayer } from '@/utilities/gameWorldLoader'
+import { world } from '@/utilities/gameWorldLoader'
 import { getIndexFromPixels } from '@/utilities/positionCalculations'
 import type { NullableAxis, DirectionOrStationary, Axis, Direction } from '@/types'
 
@@ -11,23 +11,6 @@ type TargetMovement = {
   axis: Axis
   direction: Direction
 } | null
-
-const getWalkableTiles = () => {
-  const walkablePathLayer = findLayer('WalkablePath')
-
-  if (!walkablePathLayer?.data) {
-    return {}
-  }
-
-  return walkablePathLayer.data.reduce((result, value, index) => {
-    if (value) {
-      // Index is 1-based
-      result[index + 1] = true
-    }
-
-    return result
-  }, {} as { [key: number]: boolean })
-}
 
 const getTargetPixels = (startPixels: number, direction: number, tileSize: number) =>
   direction
@@ -47,20 +30,18 @@ export function useGamePlayerMovement(
   movementY: Ref<DirectionOrStationary>,
   lastActivatedAxis: Ref<NullableAxis>
 ) {
-  const walkableTiles = getWalkableTiles()
-
   // Movement state refs per axis
   const axisMovement = {
     x: {
       playerPixels: playerLeft,
       movement: movementX,
-      movementSize: world.tilewidth
+      movementSize: world.tileWidthPx
     },
 
     y: {
       playerPixels: playerTop,
       movement: movementY,
-      movementSize: world.tileheight
+      movementSize: world.tileHeightPx
     }
   }
 
@@ -134,13 +115,13 @@ export function useGamePlayerMovement(
       // Discard if the calculated target tile is not walkable
       if (
         !resolvedTargetPixels ||
-        !walkableTiles[
+        !world.walkableTiles[
           getIndexFromPixels(
             axis === 'x' ? resolvedTargetPixels : axisMovement.x.playerPixels.value,
             axis === 'y' ? resolvedTargetPixels : axisMovement.y.playerPixels.value,
-            world.tilewidth,
-            world.tileheight,
-            world.width
+            world.tileWidthPx,
+            world.tileHeightPx,
+            world.columns
           )
         ]
       ) {
