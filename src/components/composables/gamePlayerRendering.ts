@@ -1,5 +1,5 @@
 import { computed, ref, type Ref } from 'vue'
-import tilesetUrl from '@/assets/game/character_tileset.png'
+import playerTileSetUrl from '@/assets/game/character_tileset.png'
 import type { AnimationMap, Axis, Direction, DirectionOrStationary, NullableAxis } from '@/types'
 import { getPixelsFromPosition } from '@/utilities/positionCalculations'
 import { world } from '@/utilities/gameWorldLoader'
@@ -94,9 +94,10 @@ export function useGamePlayerRendering(
   }
 
   return {
+    playerTileSetUrl,
     playerWidthCss: `${widthPixels}px`,
     playerHeightCss: `${heightPixels}px`,
-    playerBackgroundCss: `url(${tilesetUrl}) 0px 0px no-repeat`,
+    playerBackgroundCss: `url(${playerTileSetUrl}) 0px 0px no-repeat`,
     playerStyle,
     playerSpriteAnimation,
     updatePlayer

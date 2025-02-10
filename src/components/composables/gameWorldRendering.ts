@@ -12,8 +12,10 @@ export function useGameWorldRendering(playerTop: Ref<number>, playerLeft: Ref<nu
     height: world.heightPx + 'px'
   }))
 
+  const backgroundTileUrl = world.backgroundTileUrl
+
   const worldBackgroundCss = computed(() =>
-    world.backgroundTileUrl ? `url(${world.backgroundTileUrl}) 0px 0px repeat` : null
+    backgroundTileUrl ? `url(${backgroundTileUrl}) 0px 0px repeat` : null
   )
 
   const layersUrls = computed(() => world.layersUrls)
@@ -21,6 +23,7 @@ export function useGameWorldRendering(playerTop: Ref<number>, playerLeft: Ref<nu
   return {
     mapStyle,
     worldBackgroundCss,
+    backgroundTileUrl,
     layersUrls
   }
 }
