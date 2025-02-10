@@ -38,3 +38,15 @@ export type BooleanDictionary = {
 export type Point = [x: number, y: number]
 
 export type Triangle = [p1: Point, p2: Point, p3: Point]
+
+export type World = {
+  tileWidthPx: number
+  tileHeightPx: number
+  widthPx: number
+  heightPx: number
+  columns: number
+  backgroundTileUrl: string | null
+  layersUrls: string[]
+  walkableTiles: { [key: number]: boolean }
+  interactions: { [key: number]: Interaction }
+}
