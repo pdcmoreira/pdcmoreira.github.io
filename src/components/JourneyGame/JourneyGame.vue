@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useKeyDetection } from '@/components/composables/keyDetection'
 import { useGameTouchControls } from '@/components/composables/gameTouchControls'
 import { useGameKeyActions } from '@/components/composables/gameKeyActions'
@@ -12,6 +12,8 @@ import { useGameTileInteractions } from '@/components/composables/gameTileIntera
 import { useGameState } from '@/components/composables/gameState'
 import { useGamePopup } from '@/components/composables/gamePopup'
 import { useGameTileInteractionHandling } from '@/components/composables/gameTileInteractionHandling'
+import { preloadImages } from '@/utilities/preloadImages'
+import { isNotNull } from '@/utilities/typeAssertions'
 import GamePopup from './GamePopup.vue'
 import GameGoalTracker from './GameGoalTracker.vue'
 import GameVictoryBox from './GameVictoryBox.vue'
@@ -30,7 +32,10 @@ const activeKeys = computed(() => [...pressedKeys.value, ...pressedDPadKeys.valu
 
 const { movementX, movementY, lastActivatedAxis } = useGameKeyActions(activeKeys)
 
-const { mapStyle, worldBackgroundCss, layersUrls } = useGameWorldRendering(playerTop, playerLeft)
+const { mapStyle, worldBackgroundCss, backgroundTileUrl, layersUrls } = useGameWorldRendering(
+  playerTop,
+  playerLeft
+)
 
 const { movementAxis, movementDirection, updateMovement } = useGamePlayerMovement(
   playerLeft,
@@ -41,6 +46,7 @@ const { movementAxis, movementDirection, updateMovement } = useGamePlayerMovemen
 )
 
 const {
+  playerTileSetUrl,
   playerBackgroundCss,
   playerHeightCss,
   playerWidthCss,
@@ -74,9 +80,22 @@ const {
 
 debugEnabled.value = import.meta.env.VITE_DEBUG_ENABLED === 'true'
 
-const isLoading = false
+const isLoading = ref(true)
+
+// Preload assets and remove the loading state
+;(async () => {
+  const imagesUrls = [...layersUrls.value, backgroundTileUrl, playerTileSetUrl]
+
+  await preloadImages(imagesUrls.filter(isNotNull))
+
+  isLoading.value = false
+})()
 
 useGameLoop(() => {
+  if (isLoading.value) {
+    return
+  }
+
   updateMovement()
 
   updatePlayer()
