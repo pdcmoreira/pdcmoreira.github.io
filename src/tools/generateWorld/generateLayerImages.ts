@@ -59,7 +59,7 @@ export const generateLayerImages = async (world: World, layers: TiledLayer[]) =>
 
         writePublicPng(imagePath, layerImage)
 
-        return imagePath
+        return `/${imagePath}`
       })
   )
 }

@@ -24,5 +24,5 @@ export const generateBackgroundTile = async (world: World) => {
 
   writePublicPng(backgroundTilePath, tile2D)
 
-  return backgroundTilePath
+  return `/${backgroundTilePath}`
 }

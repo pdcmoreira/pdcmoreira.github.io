@@ -4,12 +4,12 @@
   "tileWidthPx": 32,
   "tileHeightPx": 32,
   "columns": 50,
-  "backgroundTileUrl": "game/tile-bg.png",
+  "backgroundTileUrl": "/game/tile-bg.png",
   "layersUrls": [
-    "game/layer-0.png",
-    "game/layer-1.png",
-    "game/layer-2.png",
-    "game/layer-3.png"
+    "/game/layer-0.png",
+    "/game/layer-1.png",
+    "/game/layer-2.png",
+    "/game/layer-3.png"
   ],
   "walkableTiles": {
     "375": true,
