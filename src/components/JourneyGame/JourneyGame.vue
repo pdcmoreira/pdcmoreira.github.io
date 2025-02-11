@@ -91,12 +91,12 @@ const isLoading = ref(true)
   isLoading.value = false
 })()
 
-useGameLoop(() => {
+useGameLoop((delta) => {
   if (isLoading.value) {
     return
   }
 
-  updateMovement()
+  updateMovement(delta)
 
   updatePlayer()
 

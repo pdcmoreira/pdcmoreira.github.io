@@ -7,17 +7,17 @@ export const keyMappings: KeyMap = {
   moveUp: ['w', 'W', 'ArrowUp', 'DPadUp']
 }
 
-// Process key mappings into a flat map
-
 export const flatKeyMap: FlatKeyMap = {}
+
+// Process key mappings into a flat map
 ;(Object.keys(keyMappings) as Action[]).forEach((action) => {
   Object.assign(
     flatKeyMap,
 
-    keyMappings[action].reduce((accumulator: typeof flatKeyMap, key): typeof flatKeyMap => {
+    keyMappings[action].reduce((accumulator, key): FlatKeyMap => {
       accumulator[key] = action
 
       return accumulator
-    }, {} as typeof flatKeyMap)
+    }, {} as FlatKeyMap)
   )
 })

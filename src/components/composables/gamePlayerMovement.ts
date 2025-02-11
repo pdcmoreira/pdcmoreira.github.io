@@ -4,7 +4,7 @@ import { world } from '@/utilities/gameWorldLoader'
 import { getIndexFromPixels } from '@/utilities/positionCalculations'
 import type { NullableAxis, DirectionOrStationary, Axis, Direction } from '@/types'
 
-const movementSpeed = 3
+const movementSpeed = 200
 
 type TargetMovement = {
   pixels: number
@@ -82,7 +82,7 @@ export function useGamePlayerMovement(
 
   const movementDirection = ref<DirectionOrStationary>(0)
 
-  const updateMovement = () => {
+  const updateMovement = (delta: number) => {
     // Clear the currentTarget if it has already completed
     if (
       currentTarget &&
@@ -151,7 +151,7 @@ export function useGamePlayerMovement(
       // Resolve what would be the final position after adding the movement speed
       resolvedTargetPixels =
         axisMovement[movementAxis.value].playerPixels.value +
-        movementDirection.value * movementSpeed
+        movementDirection.value * movementSpeed * delta
 
       // Adjust the calculation if it goes beyond the target
       if (
