@@ -1,6 +1,7 @@
 import throttle from 'lodash/throttle'
 import { ref } from 'vue'
 
+// Resize handler throttle delay (ms)
 const delay = 100
 
 // Singletons

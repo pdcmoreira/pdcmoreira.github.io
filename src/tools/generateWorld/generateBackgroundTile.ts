@@ -1,13 +1,12 @@
 import type { World } from '@/types'
-import { getTileImageDataFromIndex, getTileSet2D, tileSet } from './tileset'
+import { backgroundTileId, backgroundTilePublicPath } from './settings'
+import { getTileImageDataFromIndex, getTileSet, getTileSet2D } from './tileset'
 import { copyPixels, createImage2D } from './images'
 import { writePublicPng } from './files'
 
-const backgroundTileId = 663
-
-const backgroundTilePath = 'game/tile-bg.png'
-
 export const generateBackgroundTile = async (world: World) => {
+  const tileSet = getTileSet()
+
   const tile2D = createImage2D(world.tileWidthPx, world.tileHeightPx)
 
   const tileSet2D = await getTileSet2D()
@@ -22,7 +21,7 @@ export const generateBackgroundTile = async (world: World) => {
 
   copyPixels(tile2D, 0, 0, tileImageData)
 
-  writePublicPng(backgroundTilePath, tile2D)
+  writePublicPng(backgroundTilePublicPath, tile2D)
 
-  return `/${backgroundTilePath}`
+  return `/${backgroundTilePublicPath}`
 }

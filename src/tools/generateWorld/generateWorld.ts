@@ -1,7 +1,6 @@
 import type { World } from '@/types'
 import { writeJsonAssetFile } from './files'
-
-const generatedWorldPath = 'game/generated/world.json'
+import { generatedWorldPath } from './assetsPaths'
 
 export const generateWorld = async (
   world: World,
