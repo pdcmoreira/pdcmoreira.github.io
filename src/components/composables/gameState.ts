@@ -1,8 +1,14 @@
 import { reactive, ref } from 'vue'
 import type { BooleanDictionary, Interaction } from '@/types'
 import { workExperience } from '@/utilities/gameWorkExperienceLoader'
+import { initialPlayerTilePosition } from '@/gameSettings'
+import { world } from '@/utilities/gameWorldLoader'
 
-export const getInitialPlayerPosition = (): [x: number, y: number] => [28 * 32, 51 * 32]
+export const getInitialPlayerPosition = (): [x: number, y: number] => {
+  const [x, y] = initialPlayerTilePosition
+
+  return [x * world.tileWidthPx, y * world.tileHeightPx]
+}
 
 export const getVisitedCompaniesInitialState = () =>
   Object.keys(workExperience).reduce((result, interactionName) => {

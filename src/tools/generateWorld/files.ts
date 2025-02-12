@@ -3,10 +3,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { loadImage, type CanvasRenderingContext2D } from 'canvas'
 import { createImage2D } from './images'
 import { resolveAbsolutePath } from './resolvePath'
-
-const assetsPath = 'src/assets'
-
-const publicPath = 'public'
+import { assetsPath, publicPath } from './settings'
 
 const defaultEncoding: BufferEncoding = 'utf8'
 

@@ -1,42 +1,19 @@
 import { computed, ref, type Ref } from 'vue'
-import playerTileSetUrl from '@/assets/game/character_tileset.png'
-import type { AnimationMap, Axis, Direction, DirectionOrStationary, NullableAxis } from '@/types'
+import type { CharacterInfo, Axis, Direction, DirectionOrStationary, NullableAxis } from '@/types'
 import { getPixelsFromPosition } from '@/utilities/positionCalculations'
 import { world } from '@/utilities/gameWorldLoader'
+import playerTileSetUrl from '@/assets/game/character_tileset.png'
+import characterInfo from '@/assets/game/character_info.json'
 
-const widthPixels = 32
-const heightPixels = 64
-const frameDuration = 500
-
-// Some basic manually-made animation map, based on the tileset image
-const playerAnimationMap: AnimationMap = {
-  standing: {
-    x: {
-      '-1': [2, 0, 1],
-      1: [0, 0, 1]
-    },
-
-    y: {
-      '-1': [1, 0, 1],
-      1: [3, 0, 1]
-    }
-  },
-
-  moving: {
-    x: {
-      '-1': [12, 2, 6],
-      1: [0, 2, 6]
-    },
-
-    y: {
-      '-1': [6, 2, 6],
-      1: [18, 2, 6]
-    }
-  }
-}
+const {
+  width: widthPixels,
+  height: heightPixels,
+  frameDuration,
+  animationMap
+} = characterInfo as unknown as CharacterInfo
 
 const getAnimationFrames = (axis: Axis, direction: Direction, animation: string) =>
-  playerAnimationMap[animation][axis][direction]
+  animationMap[animation][axis][direction]
 
 export function useGamePlayerRendering(
   playerLeft: Ref<number>,

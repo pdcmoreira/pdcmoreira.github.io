@@ -3,8 +3,7 @@ import { isNotNull } from '@/utilities/typeAssertions'
 import { world } from '@/utilities/gameWorldLoader'
 import { getIndexFromPixels } from '@/utilities/positionCalculations'
 import type { NullableAxis, DirectionOrStationary, Axis, Direction } from '@/types'
-
-const movementSpeed = 200
+import { movementSpeed } from '@/gameSettings'
 
 type TargetMovement = {
   pixels: number

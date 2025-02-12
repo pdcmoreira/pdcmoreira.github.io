@@ -26,6 +26,13 @@ export type AnimationMap = {
   }
 }
 
+export type CharacterInfo = {
+  width: number
+  height: number
+  frameDuration: number
+  animationMap: AnimationMap
+}
+
 export type Interaction = {
   name: string
   type: string
