@@ -1,7 +1,7 @@
 import type { CanvasRenderingContext2D } from 'canvas'
 import type { TiledLayer } from './tiledTypes'
 import type { World } from '@/types'
-import { getTileImageDataFromIndex, getTileSet2D, tileSet } from './tileset'
+import { getTileImageDataFromIndex, getTileSet, getTileSet2D } from './tileset'
 import { getPixelsFromIndex } from '@/utilities/positionCalculations'
 import { isImageLayer } from './imageLayer'
 import { copyPixels, createImage2D } from './images'
@@ -45,6 +45,8 @@ const generateLayerImage = (
 const getImagePath = (index: number) => `game/layer-${index}.png`
 
 export const generateLayerImages = async (world: World, layers: TiledLayer[]) => {
+  const tileSet = getTileSet()
+
   const tileSet2D = await getTileSet2D()
 
   return (

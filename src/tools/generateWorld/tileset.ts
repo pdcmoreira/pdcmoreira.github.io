@@ -1,13 +1,20 @@
 import type { CanvasRenderingContext2D } from 'canvas'
 import type { TiledTileSet } from './tiledTypes'
 import { getPixelsFromIndex } from '@/utilities/positionCalculations'
-import { loadImageAssetFromPng } from './files'
-import tileSetJson from '@/assets/game/world/exteriors.json'
-import { tileSetImagePath } from './assetsPaths'
+import { loadImageAssetFromPng, readJsonAssetFile } from './files'
+import { tileSetPath, tileSetImagePath } from './assetsPaths'
+
+let tileSet: TiledTileSet | null = null
 
 let tileSet2D: CanvasRenderingContext2D | null = null
 
-export const tileSet = tileSetJson as TiledTileSet
+export const getTileSet = () => {
+  if (!tileSet) {
+    tileSet = readJsonAssetFile<TiledTileSet>(tileSetPath)
+  }
+
+  return tileSet
+}
 
 export const getTileSet2D = async () => {
   if (!tileSet2D) {
