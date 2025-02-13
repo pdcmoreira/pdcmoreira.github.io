@@ -1,11 +1,11 @@
 { "columns":176,
  "image":"exteriors_tileset.png",
- "imageheight":8032,
+ "imageheight":12608,
  "imagewidth":5632,
  "margin":0,
  "name":"Exteriors",
  "spacing":0,
- "tilecount":44176,
+ "tilecount":69344,
  "tiledversion":"1.10.1",
  "tileheight":32,
  "tiles":[
