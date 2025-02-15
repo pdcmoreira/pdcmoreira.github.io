@@ -22,10 +22,10 @@
     "name": "Knok Healthcare",
     "messages": [
       "Senior Front-end Engineer, 2019 - 2023",
-      "Front-end development of the company's main product, playing an important role in defining technical solutions for the front-end, within a multidisciplinary team.",
-      "Extensive integration of Vonage Video API, payment gateways and flows, real-time communication, RTL support",
-      "Tech stack maintenance, including Vue 2 → Vue 3 migration",
-      "DX improvements with custom tooling",
+      "Developed the company's main product, shaping front-end technical solutions within a multidisciplinary team.",
+      "Built shared components, integrated Vonage Video API, payment gateways, real-time communication and RTL support.",
+      "Tech stack maintenance, including Vue 2 → Vue 3 migration.",
+      "DX improvements with custom tooling.",
       "Skills: Vue.js · TypeScript · JavaScript · CI · Storybook · GitHub Actions"
     ]
   },
@@ -33,12 +33,11 @@
     "name": "Kenbi",
     "messages": [
       "Lead Front-end Engineer, 2023 - 2025",
-      "Led front-end efforts for internal management tools supporting elderly care operations in Germany.",
-      "Designed and implemented scalable front-end solutions, collaborating closely with back-end engineers and stakeholders.",
-      "Contributed in modernizing the platform by migrating from a legacy system to a newly built app featuring a custom TailwindCSS-based design system.",
-      "Developed data-driven features such as interactive dashboards (Chart.js), route planning maps (OpenLayers), and customer feedback tracking (Refiner).",
-      "Advocated and implemented best practices, including SOLID principles, comprehensive testing, and well-structured documentation to enhance maintainability and team efficiency.",
-      "Strengthened the team by conducting technical interviews, onboarding new members, and mentoring developers to ensure seamless knowledge transfer.",
+      "Led front-end development for management tools supporting elderly care operations.",
+      "Helped migrating the platform to a new app with a TailwindCSS-based design system.",
+      "Built shared components, dashboards (Chart.js), route planning maps (OpenLayers) and feedback tracking (Refiner).",
+      "Improved code quality by implementing SOLID principles, tests and clear documentation.",
+      "Conducted technical interviews, onboarded, and mentored new developers.",
       "Skills: Vue.js · JavaScript . TailwindCSS"
     ]
   }
