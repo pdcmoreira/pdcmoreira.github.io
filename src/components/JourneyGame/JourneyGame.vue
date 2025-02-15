@@ -192,7 +192,7 @@ useGameLoop((delta) => {
 
     & > .player {
       position: absolute;
-      z-index: 2;
+      z-index: 3;
       background: v-bind(playerBackgroundCss);
       height: v-bind(playerHeightCss);
       width: v-bind(playerWidthCss);
