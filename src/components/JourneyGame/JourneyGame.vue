@@ -125,10 +125,10 @@ useGameLoop((delta) => {
 
 <template>
   <div ref="journeyGame" class="journey-game">
-    <div class="map-scaler" :style="scalingStyle">
-      <div v-if="isLoading" class="loading">Loading...</div>
+    <div v-if="isLoading" class="loading">Loading...</div>
 
-      <template v-else>
+    <template v-else>
+      <div class="map-scaler" :style="scalingStyle">
         <div class="map" :style="mapStyle">
           <div class="layers-container">
             <div
@@ -141,85 +141,82 @@ useGameLoop((delta) => {
 
           <div class="player" :style="playerStyle" />
         </div>
-      </template>
-    </div>
-
-    <div class="game-ui">
-      <GameGoalTracker :total="companiesCount" :won="visitedCompaniesCount" :style="scalingStyle" />
-
-      <GamePopup
-        v-if="isPopupOpen"
-        :title="popupTitle"
-        :messages="popupMessages"
-        :style="scalingStyle"
-      />
-
-      <GameVictoryBox v-if="showVictory" @click:restart="reset" :style="scalingStyle" />
-
-      <div v-if="debugEnabled" class="debug">
-        <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>
       </div>
 
-      <DPadToggle v-if="allowTouchControls" v-model="showVirtualGamePad" />
+      <div class="game-ui">
+        <GameGoalTracker
+          :total="companiesCount"
+          :won="visitedCompaniesCount"
+          :style="scalingStyle"
+        />
 
-      <DPad
-        v-if="showVirtualGamePad"
-        :debug="debugEnabled"
-        @update:pressed-keys="pressedDPadKeys = $event"
-      />
-    </div>
+        <GamePopup
+          v-if="isPopupOpen"
+          :title="popupTitle"
+          :messages="popupMessages"
+          :style="scalingStyle"
+        />
+
+        <GameVictoryBox v-if="showVictory" @click:restart="reset" :style="scalingStyle" />
+
+        <div v-if="debugEnabled" class="debug">
+          <pre v-for="(row, index) in debugRows" :key="index">{{ row }}</pre>
+        </div>
+
+        <DPadToggle v-if="allowTouchControls" v-model="showVirtualGamePad" />
+
+        <DPad
+          v-if="showVirtualGamePad"
+          :debug="debugEnabled"
+          @update:pressed-keys="pressedDPadKeys = $event"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
 <style lang="less">
 .journey-game {
+  // Mixin to absolutely position and fully ocuppy the available space
+  .full-absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   overflow: hidden;
   background: v-bind(worldBackgroundCss);
   font-family: 'Press Start 2P', cursive;
   font-size: 12px;
   color: #212529;
   position: relative;
+  .full-absolute;
 
-  &,
-  & > .map-scaler {
-    position: relative;
+  & > .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
+    background: #000;
+    font-weight: bold;
+    font-size: 1.6rem;
+    color: #fff;
   }
 
   & > .map-scaler {
-    & > .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      font-weight: bold;
-      font-size: 1.6rem;
-      color: #fff;
-    }
+    .full-absolute;
 
     & > .map {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      .full-absolute;
 
       & > .layers-container {
-        position: relative;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
+        .full-absolute;
 
         & > .layer {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
+          .full-absolute;
         }
       }
 
@@ -259,29 +256,12 @@ useGameLoop((delta) => {
     }
 
     & > .game-popup {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      .full-absolute;
       z-index: 20;
     }
 
     & > .game-victory-box {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 30;
-    }
-
-    & > .game-victory-box {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      .full-absolute;
       z-index: 30;
     }
 
