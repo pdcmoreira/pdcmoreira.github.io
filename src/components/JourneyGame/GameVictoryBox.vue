@@ -18,7 +18,7 @@ defineEmits(['click:restart'])
 </script>
 
 <template>
-  <div class="victory-box">
+  <div class="game-victory-box">
     <GameBox>
       <h1>Congratulations!</h1>
 
@@ -32,16 +32,10 @@ defineEmits(['click:restart'])
 </template>
 
 <style lang="less">
-.victory-box {
-  position: absolute;
+.game-victory-box {
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 30;
 
   .game-box {
     width: 500px;

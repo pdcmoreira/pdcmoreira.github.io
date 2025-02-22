@@ -1,4 +1,4 @@
-import { computed, ref, type Ref } from 'vue'
+import { computed, ref, type Ref, type CSSProperties } from 'vue'
 import type { CharacterInfo, Axis, Direction, DirectionOrStationary, NullableAxis } from '@/types'
 import { getPixelsFromPosition } from '@/utilities/positionCalculations'
 import { world } from '@/utilities/gameWorldLoader'
@@ -37,7 +37,7 @@ export function useGamePlayerRendering(
     return { x: xPixels, y: yPixels, length }
   })
 
-  const playerStyle = computed(() => {
+  const playerStyle = computed<CSSProperties>(() => {
     // playerTop and playerLeft refer to the player's "effective tile" position, for all calculation
     // purposes, but visually we place the player's "feet" in that tile and let the rest of his body
     // be wherever above it. So we need the visual rendering to be a bit offset.

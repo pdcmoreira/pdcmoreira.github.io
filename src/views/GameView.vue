@@ -6,14 +6,18 @@ import SourceLink from '@/components/SourceLink.vue'
 
 <template>
   <div class="game-view">
-    <JourneyGame />
+    <div class="game-container">
+      <JourneyGame />
+    </div>
 
-    <ContactInfo />
+    <div class="overlay-container">
+      <ContactInfo />
 
-    <SourceLink />
+      <SourceLink />
 
-    <!-- TODO -->
-    <!-- <RouterLink to="/boring-mode" class="boring-mode-link">Boring version →</RouterLink> -->
+      <!-- TODO -->
+      <!-- <RouterLink to="/boring-mode" class="boring-mode-link">Boring version →</RouterLink> -->
+    </div>
   </div>
 </template>
 
@@ -26,28 +30,42 @@ import SourceLink from '@/components/SourceLink.vue'
   right: 0;
   height: 100%;
 
-  .contact-info {
-    position: fixed;
-    top: 6px;
-    left: 6px;
-    box-shadow: 13px 12px 19px -16px rgba(0, 0, 0, 0.1);
-    z-index: 20;
+  .game-container,
+  .overlay-container {
+    width: 100%;
+    height: 100%;
   }
 
-  .source {
-    position: fixed;
-    bottom: 6px;
-    right: 6px;
-    z-index: 20;
-  }
+  .overlay-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 30;
 
-  .boring-mode-link {
-    position: fixed;
-    bottom: 6px;
-    right: 6px;
-    text-align: right;
-    color: #fff;
-    text-decoration: none;
+    .contact-info {
+      position: fixed;
+      top: 6px;
+      left: 6px;
+      box-shadow: 13px 12px 19px -16px rgba(0, 0, 0, 0.1);
+      pointer-events: auto;
+    }
+
+    .source {
+      position: fixed;
+      bottom: 6px;
+      right: 6px;
+      pointer-events: auto;
+    }
+
+    .boring-mode-link {
+      position: fixed;
+      bottom: 6px;
+      right: 6px;
+      text-align: right;
+      color: #fff;
+      text-decoration: none;
+    }
   }
 }
 </style>
