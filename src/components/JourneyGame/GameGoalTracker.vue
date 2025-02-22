@@ -23,18 +23,18 @@ defineProps({
 
 <style lang="less">
 .game-goal-tracker {
-  position: absolute;
-  top: 80px;
-  left: 30px;
-  z-index: 20;
-
   .content {
     display: flex;
     justify-content: center;
   }
 
-  .medal:not(.won) {
-    filter: grayscale(1);
+  .medal {
+    width: 32px;
+    height: auto;
+
+    &:not(.won) {
+      filter: grayscale(1);
+    }
   }
 }
 </style>

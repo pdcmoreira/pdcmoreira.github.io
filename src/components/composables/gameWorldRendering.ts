@@ -1,11 +1,11 @@
-import { computed, type Ref } from 'vue'
+import { computed, type Ref, type CSSProperties } from 'vue'
 import { world } from '@/utilities/gameWorldLoader'
 import { useWindowSize } from './windowSize'
 
 export function useGameWorldRendering(playerTop: Ref<number>, playerLeft: Ref<number>) {
   const { windowWidth, windowHeight } = useWindowSize()
 
-  const mapStyle = computed(() => ({
+  const mapStyle = computed<CSSProperties>(() => ({
     left: windowWidth.value / 2 - playerLeft.value + 'px',
     top: windowHeight.value / 2 - playerTop.value + 'px',
     width: world.widthPx + 'px',

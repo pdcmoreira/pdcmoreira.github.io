@@ -186,18 +186,22 @@ watch(debugCanvas, (canvas) => {
     return
   }
 
-  const context = canvas.getContext('2d')
+  const context2D = canvas.getContext('2d')
 
-  if (!context) {
+  if (!context2D) {
     return
   }
 
   const mainKeys = ['DPadUp', 'DPadDown', 'DPadLeft', 'DPadRight']
 
   Object.entries(keyTrianglesMap.value).forEach(([key, triangle]) => {
-    drawTriangle(context, triangle, mainKeys.includes(key) ? 'red' : 'blue')
+    drawTriangle(context2D, triangle, mainKeys.includes(key) ? 'red' : 'blue')
   })
 })
+
+// CSS bindings
+
+const sizeCss = computed(() => `${props.size}px`)
 </script>
 
 <template>
@@ -226,16 +230,16 @@ watch(debugCanvas, (canvas) => {
 
 <style lang="less">
 .d-pad {
-  width: v-bind('size + "px"');
-  height: v-bind('size + "px"');
+  width: v-bind(sizeCss);
+  height: v-bind(sizeCss);
   opacity: 0.4;
 
   & > svg {
     position: absolute;
     top: 0;
     left: 0;
-    width: v-bind('size + "px"');
-    height: v-bind('size + "px"');
+    width: v-bind(sizeCss);
+    height: v-bind(sizeCss);
   }
 
   & > .debug {

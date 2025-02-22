@@ -71,7 +71,7 @@ const emit = defineEmits<{
 
   &.open {
     & > .caret {
-      transform: rotate(180deg);
+      transform: rotate(90deg);
     }
   }
 }

@@ -31,15 +31,9 @@ const resolvedMessages = computed(() =>
 
 <style lang="less">
 .game-popup {
-  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 20;
 
   .game-box {
     opacity: 0.85;
