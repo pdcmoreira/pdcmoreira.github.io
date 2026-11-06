@@ -15,7 +15,7 @@
     "gen:world": "tsx --tsconfig tsconfig.tools.json src/tools/generateWorld/index.ts"
   },
   "dependencies": {
-    "lodash": "4.17.21",
+    "lodash": "4.18.1",
     "point-in-triangle": "1.0.1",
     "vue": "3.5.13",
     "vue-router": "4.5.0"
